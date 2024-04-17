@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+	<main 
+        class="d-flex justify-content-center align-items-center" 
+        style="background-image: url('https://source.unsplash.com/random/?books'); background-size: cover; background-repeat: no-repeat; background-position: center;">
+		<div class="bg-light p-5 rounded shadow-sm">
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+                {% if app.user %}
+                    <div class="mb-3">
+                        Vous êtes connecté en tant que
+                        {{ app.user.userIdentifier }},
+                        <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    </div>
+                {% endif %}
+                <h1 class="mb-3 font-weight-normal">Connexion</h1>
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                <label for="inputPassword" class="mt-4">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me">
+                        Se souvenir de moi
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Connexion
+                </button>
+            </form>
+        </div>
+	</main>
+{% endblock %}

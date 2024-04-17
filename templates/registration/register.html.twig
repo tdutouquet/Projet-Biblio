@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription
+{% endblock %}
+
+{% block body %}
+	<main class="d-flex justify-content-center align-items-center" style="background-image: url('https://source.unsplash.com/random/?books'); background-size: cover; background-repeat: no-repeat; background-position: center;">
+		<div class="bg-light p-5 rounded shadow-sm w-50">
+
+			<h1 class="mb-3 font-weight-normal text-center">Inscription</h1>
+			{{ form_errors(registrationForm) }}
+
+			{{ form_start(registrationForm) }}
+			<div class="mb-3">
+				<h3 class="text-center">Compte</h3>
+				{{ form_row(registrationForm.email) }}
+				{{ form_row(registrationForm.plainPassword) }}
+			</div>
+
+			<div class="mb-3">
+				<h3 class="text-center">Coordonnées</h3>
+				{{ form_row(registrationForm.firstname) }}
+				{{ form_row(registrationForm.lastname) }}
+				{{ form_row(registrationForm.address) }}
+				{{ form_row(registrationForm.city) }}
+				{{ form_row(registrationForm.zipcode) }}
+				{{ form_row(registrationForm.phone) }}
+				{{ form_row(registrationForm.birth_date) }}
+			</div>
+
+			{{ form_row(registrationForm.consent) }}
+			<div class="d-grid mt-4">
+				<button type="submit" class="btn btn-primary btn-lg">Je m'inscris !</button>
+			</div>
+			{{ form_end(registrationForm) }}
+		</div>
+	</main>
+{% endblock %}
