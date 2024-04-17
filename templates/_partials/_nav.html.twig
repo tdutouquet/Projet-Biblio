@@ -32,6 +32,11 @@
 			</ul>
 			<div class="d-flex">
 				{% if app.user %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<a class="nav-link" href="{{ path('app_main_admin') }}">
+							<button type="button" class="btn btn-dark">Administration</button>
+						</a>
+					{% endif %}
 					<a class="nav-link" href="{{ path('app_logout') }}">
 						<button type="button" class="btn btn-link">Déconnexion</button>
 					</a>
@@ -39,12 +44,12 @@
 						<button type="button" class="btn btn-light">Mon compte</button>
 					</a>
 				{% else %}
-				<a class="nav-link" href="{{ path('app_login') }}">
-					<button type="button" class="btn btn-link text-decoration-none">Connexion</button>
-				</a>
-				<a class="nav-link" href="{{ path('app_register') }}">
-					<button type="button" class="btn btn-light">Inscription</button>
-				</a>
+					<a class="nav-link" href="{{ path('app_login') }}">
+						<button type="button" class="btn btn-link text-decoration-none">Connexion</button>
+					</a>
+					<a class="nav-link" href="{{ path('app_register') }}">
+						<button type="button" class="btn btn-light">Inscription</button>
+					</a>
 				{% endif %}
 			</div>
 		</div>
