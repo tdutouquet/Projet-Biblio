@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $birth_date = null;
+    private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
     private ?bool $is_banned = null;
@@ -214,14 +214,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    public function getBirthdate(): ?\DateTimeInterface
     {
-        return $this->birth_date;
+        return $this->birthdate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birth_date): static
+    public function setBirthdate(\DateTimeInterface $birthdate): static
     {
-        $this->birth_date = $birth_date;
+        $this->birthdate = $birthdate;
 
         return $this;
     }
