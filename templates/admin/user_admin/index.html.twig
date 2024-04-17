@@ -7,43 +7,48 @@
 	<main class="d-flex flex-column align-items-center">
 		{% include '_partials/_adminnav.html.twig' %}
 		<h2 class="pb-4">Gestion des utilisateurs</h2>
-        <table class="table table-striped table-hover w-75 mx-auto">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Statut</th>
-                    <th>Rôle</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-            <tr>
-                <td class="align-middle">{{ user.id }}</td>
-                <td class="align-middle">{{ user.lastname }}</td>
-                <td class="align-middle">{{ user.firstname }}</td>
-                <td class="align-middle">{{ user.email }}</td>
-                <td class="align-middle">{{ user.isBanned == 0 ? 'Autorisé' : 'Banni' }}</td>
-                <td>
-                    {% for role in user.roles %}
-                        {% if role == 'ROLE_ADMIN' %}
-                            {% set name = 'Admin' %}
-                            {% set color = 'warning' %}
-                        {% else %}
-                            {% set name = 'Utilisateur' %}
-                            {% set color = 'secondary' %}
-                        {% endif %}
-                        <span class="badge rounded-pill text-bg-{{color}}">{{ name }}</span>
-                    {% endfor %}
-                </td>
-                <td class="align-middle">
-                    <a href="#" class="btn btn-secondary btn-sm">Modifier</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+		<table class="table table-striped table-hover w-75 mx-auto">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nom</th>
+					<th>Prénom</th>
+					<th>Email</th>
+					<th>Statut</th>
+					<th>Rôle</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+					<tr>
+						<td class="align-middle">{{ user.id }}</td>
+						<td class="align-middle">{{ user.lastname }}</td>
+						<td class="align-middle">{{ user.firstname }}</td>
+						<td class="align-middle">{{ user.email }}</td>
+						<td class="align-middle">{{ user.isBanned == 0 ? 'Autorisé' : 'Banni' }}</td>
+						<td>
+							{% for role in user.roles %}
+								{% if role == 'ROLE_ADMIN' %}
+									{% set name = 'Admin' %}
+									{% set color = 'warning' %}
+								{% else %}
+									{% set name = 'Utilisateur' %}
+									{% set color = 'secondary' %}
+								{% endif %}
+								<span class="badge rounded-pill text-bg-{{color}}">{{ name }}</span>
+							{% endfor %}
+						</td>
+						<td class="align-middle">
+							<a href="{{ path('app_user_admin_details', {id:user.id}) }}" class="btn btn-secondary btn-sm">Modifier</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit">Modifier</button>
+		{{ form_end(form) }}
 	</main>
 {% endblock %}
