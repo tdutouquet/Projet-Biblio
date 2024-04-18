@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte
+{% endblock %}
+
+{% block body %}
+	<main class="w-75 mx-auto">
+		<h1 class="mb-3">Mon compte</h1>
+		<div class="alert alert-light" role="alert">
+			<strong>Bienvenue dans votre espace personnel, {{ user.firstname }}</strong> ! Ici, vous pouvez modifier vos informations personnelles et consulter l'historique de vos emprunts.
+		</div>
+
+        {# Informations personnelles #}
+		<h2 class="border-bottom pb-2 mt-5 mb-3">Informations personnelles</h2>
+		<p><strong>Nom</strong> :
+			{{ user.firstname ~ ", " ~ user.lastname }}</p>
+		<p><strong>Email</strong> :
+			{{ user.email }}</p>
+		<p><strong>Adresse</strong> :
+			{{user.address ~ ", " ~ user.city ~ ", " ~ user.zipcode}}</p>
+        <p><strong>Téléphone</strong> :
+            {{user.phone}}</p>
+        <a href="{{ path('app_account_edit') }}" class="btn btn-primary">Modifier mes informations</a>
+
+        {# Historique d'emprunts #}
+        <h2 class="border-bottom pb-2 mt-5 mb-3">Historique d'emprunts</h2>
+
+        {# Historique de lcoation #}
+        <h2 class="border-bottom pb-2 mt-5 mb-3">Historique de locations</h2>
+	</main>
+{% endblock %}

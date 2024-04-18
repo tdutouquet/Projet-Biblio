@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil
+{% endblock %}
+
+{% block body %}
+	<main class="d-flex flex-column align-items-center">
+		<h2 class="pb-4">Mon profil</h2>
+		<a href="{{ path('app_account') }}" class="btn btn-secondary mb-4">Retour</a>
+		<h3>Utilisateur "{{user.firstname ~ " " ~ user.lastname}}"</h3>
+		<section>
+			{{ form_start(accountForm) }}
+			{{ form_row(accountForm.firstname, {'label': 'Prénom'}) }}
+			{{ form_row(accountForm.lastname, {'label': 'Nom'}) }}
+			{{ form_row(accountForm.email, {'label': 'Email'}) }}
+			{{ form_row(accountForm.password, {'label': 'Mot de passe'}) }}
+			{{ form_row(accountForm.address, {'label': 'Adresse'}) }}
+			{{ form_row(accountForm.city, {'label': 'Ville'}) }}
+			{{ form_row(accountForm.zipcode, {'label': 'Code postal'}) }}
+			{{ form_row(accountForm.phone, {'label': 'Téléphone'}) }}
+			{{ form_row(accountForm.birthdate, {'label': 'Date de naissance'}) }}
+			<button type="submit" class="btn btn-primary mt-4">Mettre à jour</button>
+		</section>
+	</main>
+{% endblock %}
