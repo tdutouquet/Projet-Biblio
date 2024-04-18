@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 class UserAdminController extends AbstractController
 {
     #[Route('/admin/utilisateurs', name: 'app_user_admin')]
@@ -22,17 +24,6 @@ class UserAdminController extends AbstractController
             'users' => $users
         ]);
     }
-
-    // #[Route('/admin/utilisateurs/details/{id}', name: 'app_user_admin_details')]
-    // public function details(UserRepository $userRepository, int $id): Response
-    // {
-    //     $user = $userRepository->find($id);
-
-    //     return $this->render('admin/user_admin/details.html.twig', [
-    //         'controller_name' => 'UserAdminDetailsController',
-    //         'user' => $user,
-    //     ]);
-    // }
 
     #[Route('/admin/utilisateurs/details/{id}', name: 'app_user_admin_details')]
     public function details(User $user, Request $request, EntityManagerInterface $em, UserRepository $userRepository, int $id): Response
@@ -61,15 +52,22 @@ class UserAdminController extends AbstractController
     }
 
     #[Route('/admin/utilisateurs/ajouter', name: 'app_user_admin_add')]
-    public function add(Request $request, EntityManagerInterface $em): Response
+    public function add(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+        $plaintextPassword = 'temp';
 
         $userForm = $this->createForm(UserFormType::class, $user);
 
         $userForm->handleRequest($request);
     
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plaintextPassword
+            );
+            $user->setPassword($hashedPassword);
+            
             $em->persist($user);
             $em->flush();
 
