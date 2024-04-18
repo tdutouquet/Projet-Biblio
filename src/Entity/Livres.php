@@ -21,10 +21,10 @@ class Livres
     private ?string $auteur = null;
 
     #[ORM\Column]
-    private ?int $annee_publication = null;
+    private ?int $anneePublication = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $maison_edition = null;
+    private ?string $maisonEdition = null;
 
     #[ORM\Column(length: 255)]
     private ?string $resume = null;
@@ -76,24 +76,24 @@ class Livres
 
     public function getAnneePublication(): ?int
     {
-        return $this->annee_publication;
+        return $this->anneePublication;
     }
 
-    public function setAnneePublication(int $annee_publication): static
+    public function setAnneePublication(int $anneePublication): static
     {
-        $this->annee_publication = $annee_publication;
+        $this->anneePublication = $anneePublication;
 
         return $this;
     }
 
     public function getMaisonEdition(): ?string
     {
-        return $this->maison_edition;
+        return $this->maisonEdition;
     }
 
-    public function setMaisonEdition(string $maison_edition): static
+    public function setMaisonEdition(string $maisonEdition): static
     {
-        $this->maison_edition = $maison_edition;
+        $this->maisonEdition = $maisonEdition;
 
         return $this;
     }
@@ -166,6 +166,13 @@ class Livres
     public function setEtat(?Etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function setReservePar(?User $user): self
+    {
+        $this->reservePar = $user;
 
         return $this;
     }

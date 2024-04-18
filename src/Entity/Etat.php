@@ -75,4 +75,10 @@ class Etat
 
         return $this;
     }
+
+    // pour convertir en caractère l'id:
+    public function __toString() : string
+    {
+        return $this->nom ?? '';
+    }
 }
