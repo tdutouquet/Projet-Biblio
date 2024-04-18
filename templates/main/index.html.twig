@@ -1,23 +1,67 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<style>
-
-	</style>
+	<style></style>
 
 	<main class="py-0">
 		{{include ('main/_home-hero.html.twig')}}
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>C:/xampp/htdocs/Projet-Biblio/src/Controller/MainController.php</code>
-			</li>
-			<li>Your template at
-				<code>C:/xampp/htdocs/Projet-Biblio/templates/main/index.html.twig</code>
-			</li>
-		</ul>
+		<section class="container mt-5">
+			<div class="row">
+				<div class="col-md-6">
+					<h2 class="mb-4">Nos Services</h2>
+					<p>Découvrez nos services variés pour répondre à vos besoins de lecture et d'étude.</p>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Emprunt de livres</li>
+						<li class="list-group-item">Location de salles d'étude</li>
+						<li class="list-group-item">Accès à des ressources en ligne</li>
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<img src="https://source.unsplash.com/random/?service" alt="Services" class="img-fluid rounded-4 image-fit" >
+				</div>
+			</div>
+
+			<div class="row mt-5">
+				<div class="col-md-6">
+					<img src="https://source.unsplash.com/random/?event" alt="Événements" class="img-fluid rounded-4 image-fit">
+				</div>
+				<div class="col-md-6">
+					<h2 class="mb-4">Événements à venir</h2>
+					<p>Restez informé sur nos événements et ateliers organisés régulièrement.</p>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">Ateliers de lecture</li>
+						<li class="list-group-item">Conférences avec des auteurs</li>
+						<li class="list-group-item">Groupes de discussion</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="row my-5">
+				<div class="col-md-12">
+					<h2 class="mb-4">Témoignages</h2>
+					<div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<p class="fs-5 text-center">"J'adore cette bibliothèque! Les salles sont spacieuses et les collections de livres sont impressionnantes."</p>
+								<cite class="d-block text-end">- Marie, étudiante</cite>
+							</div>
+							<div class="carousel-item">
+								<p class="fs-5 text-center">"Un endroit parfait pour étudier. Le personnel est très accueillant et serviable."</p>
+								<cite class="d-block text-end">- Paul, chercheur</cite>
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
 	</main>
 {% endblock %}
