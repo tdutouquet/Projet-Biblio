@@ -1,7 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<style></style>
+	<style>
+		.image-fit {
+			height: 300px;
+			max-width: 533px;
+			width: 100%;
+			object-fit: cover;
+		}
+	</style>
 
 	<main class="py-0">
 		{{include ('main/_home-hero.html.twig')}}
@@ -18,7 +25,7 @@
 					</ul>
 				</div>
 				<div class="col-md-6">
-					<img src="https://source.unsplash.com/random/?service" alt="Services" class="img-fluid rounded-4 image-fit" >
+					<img src="https://source.unsplash.com/random/?service" alt="Services" class="img-fluid rounded-4 image-fit">
 				</div>
 			</div>
 
