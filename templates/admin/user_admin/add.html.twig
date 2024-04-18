@@ -7,9 +7,9 @@
 	<main class="d-flex flex-column align-items-center">
 		{% include '_partials/_adminnav.html.twig' %}
 		<h2 class="pb-4">Ajouter un utilisateur</h2>
-		<a href="{{ path('app_user_admin') }}" class="btn btn-primary mb-4">Retour</a>
+		<a href="{{ path('app_user_admin') }}" class="btn btn-secondary mb-4">Retour</a>
         <section class="w-75 mx-auto">
-            {% include 'admin/user_admin/_form.html.twig' %}
+            {% include 'admin/user_admin/_form.html.twig' with {'button_text': "Ajouter l'utilisateur"} %}
         </section>		
 	</main>
 {% endblock %}

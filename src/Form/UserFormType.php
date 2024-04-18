@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,8 +14,6 @@ class UserFormType extends AbstractType
     {
         $builder
             ->add('email')
-            // ->add('roles')
-            ->add('password')
             ->add('lastname')
             ->add('firstname')
             ->add('address')
@@ -25,7 +24,14 @@ class UserFormType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('is_banned')
-            // ->add('roles')
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Admin' => 'ROLE_ADMIN',
+                    'Utilisateur' => 'ROLE_USER',
+                ],
+                'multiple' => true,
+                'expanded' => true
+            ])
         ;
     }
 

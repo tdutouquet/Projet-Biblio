@@ -7,53 +7,10 @@
 	<main class="d-flex flex-column align-items-center">
 		{% include '_partials/_adminnav.html.twig' %}
 		<h2 class="pb-4">Gestion des utilisateurs</h2>
-		<a href="{{ path('app_user_admin') }}" class="btn btn-primary mb-4">Retour</a>
-		<h3>Utilisateur "{{user.firstname ~ " " ~ user.lastname}}"</h3>
-		<table class="table w-50 mx-auto">
-			<thead>
-				<tr>
-					<th scope="col">Ref</th>
-					<th scope="col">Valeur</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th scope="row">ID</th>
-					<td>{{user.id}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Prénom</th>
-					<td>{{user.firstname}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Nom</th>
-					<td>{{user.lastname}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Email</th>
-					<td>{{user.email}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Adresse</th>
-					<td>{{user.address ~ ", " ~ user.city ~ ", " ~ user.zipcode}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Téléphone</th>
-					<td>{{user.phone}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Date de naissance</th>
-					<td>{{user.birthdate|date('d/m/Y')}}</td>
-				</tr>
-				<tr>
-					<th scope="row">Date de création de compte</th>
-					<td>{{user.createdAt|date('d-m-Y H:i:s')}}</td>
-				</tr>
-			</tbody>
-		</table>
-		{# {{ form_start(form) }}
-		{{ form_widget(form) }}
-		<button type="submit">Modifier</button>
-		{{ form_end(form) }} #}
+		<a href="{{ path('app_user_admin') }}" class="btn btn-secondary mb-4">Retour</a>
+		<h3>Modifier l'utilisateur "{{userDisplay.firstname ~ " " ~ userDisplay.lastname}}"</h3>
+		<section class="w-75 mx-auto">
+            {% include 'admin/user_admin/_form.html.twig' with {'button_text': "Modifier l'utilisateur"} %}
+        </section>
 	</main>
 {% endblock %}
