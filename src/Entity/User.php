@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $birth_date = null;
+    private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
     private ?bool $is_banned = null;
@@ -68,12 +68,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Emprunt::class, mappedBy: 'user')]
     private Collection $emprunts;
+  
+    /**
+     * @var Collection<int, subscription>
+     */
+    #[ORM\OneToMany(targetEntity: subscription::class, mappedBy: 'user')]
+    private Collection $subscription;
 
     public function __construct()
     {
         $this->is_banned = false;
         $this->created_at = new \DateTimeImmutable();
         $this->emprunts = new ArrayCollection();
+        $this->subscription = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,14 +230,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    public function getBirthdate(): ?\DateTimeInterface
     {
-        return $this->birth_date;
+        return $this->birthdate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birth_date): static
+    public function setBirthdate(\DateTimeInterface $birthdate): static
     {
-        $this->birth_date = $birth_date;
+        $this->birthdate = $birthdate;
 
         return $this;
     }
@@ -273,6 +280,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->emprunts->add($emprunt);
             $emprunt->setUser($this);
         }
+        
+        return $this;
+    }
+  
+     /**     
+     * @return Collection<int, subscription>
+     */
+    public function getsubscription(): Collection
+    {
+        return $this->subscription;
+    }
+
+    public function addsubscription(subscription $subscription): static
+    {
+        if (!$this->subscription->contains($subscription)) {
+            $this->subscription->add($subscription);
+            $subscription->setUser($this);
+        }
 
         return $this;
     }
@@ -283,6 +308,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($emprunt->getUser() === $this) {
                 $emprunt->setUser(null);
+            }
+        }
+        return $this;
+    }
+          
+    public function removesubscription(subscription $subscription): static
+    {
+        if ($this->subscription->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
             }
         }
 

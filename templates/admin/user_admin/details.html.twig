@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Utilisateurs
+{% endblock %}
+
+{% block body %}
+	<main class="d-flex flex-column align-items-center">
+		{% include '_partials/_adminnav.html.twig' %}
+		<h2 class="pb-4">Gestion des utilisateurs</h2>
+		<a href="{{ path('app_user_admin') }}" class="btn btn-secondary mb-4">Retour</a>
+		<h3>Modifier l'utilisateur "{{userDisplay.firstname ~ " " ~ userDisplay.lastname}}"</h3>
+		<section class="w-75 mx-auto">
+            {% include 'admin/user_admin/_form.html.twig' with {'button_text': "Modifier l'utilisateur"} %}
+        </section>
+	</main>
+{% endblock %}

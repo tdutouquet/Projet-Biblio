@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'bd3f518b741fd0333f486dd0f852380d5799cf66',
+        'reference' => 'bdbdf818295b040c56377c69cacb036b29016fba',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'bd3f518b741fd0333f486dd0f852380d5799cf66',
+            'reference' => 'bdbdf818295b040c56377c69cacb036b29016fba',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -188,7 +188,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../fakerphp/faker',
             'aliases' => array(),
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'masterminds/html5' => array(
             'pretty_version' => '2.9.0',

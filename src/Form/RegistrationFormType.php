@@ -70,7 +70,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => false,
             ])
-            ->add('birth_date', BirthdayType::class, [
+            ->add('birthdate', BirthdayType::class, [
                 'attr' => [
                     'class' => 'form-control mb-2'
                 ],
