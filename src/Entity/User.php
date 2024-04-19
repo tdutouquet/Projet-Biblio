@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -61,10 +63,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $created_at = null;
 
+    /**
+     * @var Collection<int, subscription>
+     */
+    #[ORM\OneToMany(targetEntity: subscription::class, mappedBy: 'user')]
+    private Collection $subscription;
+
     public function __construct()
     {
         $this->is_banned = false;
         $this->created_at = new \DateTimeImmutable();
+        $this->subscription = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,6 +255,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, subscription>
+     */
+    public function getsubscription(): Collection
+    {
+        return $this->subscription;
+    }
+
+    public function addsubscription(subscription $subscription): static
+    {
+        if (!$this->subscription->contains($subscription)) {
+            $this->subscription->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removesubscription(subscription $subscription): static
+    {
+        if ($this->subscription->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
 
         return $this;
     }
