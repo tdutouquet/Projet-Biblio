@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres disponibles{% endblock %}
+
+{% block body %}
+<style>
+
+
+
+</style>
+
+{# CHANGER div en main car avec balise main, a fait en sorte de prendre une certaine hauteur de page #}
+<main>
+
+<div class="container text-center">
+    <h1>Liste des livres</h1>
+    
+    <div class="row">
+        <div class="col">
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Année de publication</th>
+                        <th>Maison d'édition</th>
+                        <th>Résumé</th>
+                        <th>Image</th>
+                        {# <th>Catégorie</th> #}
+                        <th>Disponibilité</th>
+                        <th>Note</th>
+                        {# <th>Etat</th> #}
+                        <th>Réserver</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for livre in livres %}
+                        <tr>
+                            <td>{{ livre.titre }}</td>
+                            <td>{{ livre.auteur }}</td>
+                            <td>{{ livre.anneePublication }}</td>
+                            <td>{{ livre.maisonEdition }}</td>
+                            <td>{{ livre.resume }}</td>
+                            <td>
+                            <img>{{ livre.image }}<img>
+                            </td>
+                            {# <td>{{ livre.categorie }}</td> #}
+                            <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
+                            <td>{{ livre.note }} / 5</td>
+                            {# <td>{{ livre.etat }}</td> #}
+                            <td>
+                                <form action="{{ path('app_livre_reserve', {'id': livre.id}) }}" method="post">
+                                    {% set empruntEnCours = emprunts[livre.id] ?? null %}
+                                    {% if not empruntEnCours %}
+                                    <button type="submit">Je veux réserver</button>
+                                    {% else %}
+                                    <span>Livre dispo à partir de : {{ empruntEnCours.dateFin|date("d/m/Y") }}</span>
+                                    {% endif %}
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</main>
+{% endblock %}
