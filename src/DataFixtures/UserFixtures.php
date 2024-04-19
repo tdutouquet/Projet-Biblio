@@ -55,6 +55,11 @@ class UserFixtures extends Fixture
             $manager->persist($user);
         }
 
+        // Send the data to the database
         $manager->flush();
+
+        // Reference the users
+        $this->addReference('admin', $admin);
+        $this->addReference('user', $user);
     }
 }

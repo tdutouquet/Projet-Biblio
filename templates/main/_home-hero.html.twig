@@ -3,7 +3,11 @@
 		<div class="container">
 			<h1 class="display-4">Bienvenue chez MyBiblio !</h1>
 			<p class="lead">Un simple abonnement pour toute la connaissance !</p>
-			<a href="#" class="btn btn-primary btn-lg p-3 mt-3">Je m'abonne !</a>
+			{% if app.user %}
+				<a href="{{ path('app_subscription') }}" class="btn btn-primary btn-lg p-3 mt-3">Je m'abonne</a>
+			{% else %}
+				<a href="{{ path('app_register') }}" class="btn btn-primary btn-lg p-3 mt-3">Je m'inscris</a>
+			{% endif %}
 		</div>
 	</div>
 </div>
