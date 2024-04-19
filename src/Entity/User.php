@@ -64,6 +64,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $created_at = null;
 
     /**
+     * @var Collection<int, Emprunt>
+     */
+    #[ORM\OneToMany(targetEntity: Emprunt::class, mappedBy: 'user')]
+    private Collection $emprunts;
+  
+    /**
      * @var Collection<int, subscription>
      */
     #[ORM\OneToMany(targetEntity: subscription::class, mappedBy: 'user')]
@@ -73,6 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->is_banned = false;
         $this->created_at = new \DateTimeImmutable();
+        $this->emprunts = new ArrayCollection();
         $this->subscription = new ArrayCollection();
     }
 
@@ -260,6 +267,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return Collection<int, Emprunt>
+     */
+    public function getEmprunts(): Collection
+    {
+        return $this->emprunts;
+    }
+
+    public function addEmprunt(Emprunt $emprunt): static
+    {
+        if (!$this->emprunts->contains($emprunt)) {
+            $this->emprunts->add($emprunt);
+            $emprunt->setUser($this);
+        }
+        
+        return $this;
+    }
+  
+     /**     
      * @return Collection<int, subscription>
      */
     public function getsubscription(): Collection
@@ -277,6 +302,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function removeEmprunt(Emprunt $emprunt): static
+    {
+        if ($this->emprunts->removeElement($emprunt)) {
+            // set the owning side to null (unless already changed)
+            if ($emprunt->getUser() === $this) {
+                $emprunt->setUser(null);
+            }
+        }
+        return $this;
+    }
+          
     public function removesubscription(subscription $subscription): static
     {
         if ($this->subscription->removeElement($subscription)) {
