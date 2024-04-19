@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EquipementsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EquipementsRepository::class)]
@@ -13,113 +15,59 @@ class Equipements
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Equipements = null;
+    #[ORM\Column]
+    private ?string $nom = null; // Ajout du champ pour stocker le nom de l'équipement
 
-    #[ORM\Column(length: 255)]
-    private ?string $WiFi = null;
+    /**
+     * @var Collection<int, Salles>
+     */
+    #[ORM\ManyToMany(targetEntity: Salles::class, inversedBy: 'equipements')]
+    private Collection $salles;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Projecteur = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Tableau = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Prises = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Television = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Climatisation = null;
+    public function __construct()
+    {
+        $this->salles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEquipements(): ?string
+    public function getNom(): ?string
     {
-        return $this->Equipements;
+        return $this->nom;
     }
 
-    public function setEquipements(string $Equipements): static
+    public function setNom(string $nom): self
     {
-        $this->Equipements = $Equipements;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getWiFi(): ?string
+    /**
+     * @return Collection<int, Salles>
+     */
+    public function getSalles(): Collection
     {
-        return $this->WiFi;
+        return $this->salles;
     }
 
-    public function setWiFi(string $WiFi): static
+    public function addSalle(Salles $salle): static
     {
-        $this->WiFi = $WiFi;
+        if (!$this->salles->contains($salle)) {
+            $this->salles->add($salle);
+        }
 
         return $this;
     }
 
-    public function getProjecteur(): ?string
+    public function removeSalle(Salles $salle): static
     {
-        return $this->Projecteur;
-    }
-
-    public function setProjecteur(string $Projecteur): static
-    {
-        $this->Projecteur = $Projecteur;
-
-        return $this;
-    }
-
-    public function getTableau(): ?string
-    {
-        return $this->Tableau;
-    }
-
-    public function setTableau(string $Tableau): static
-    {
-        $this->Tableau = $Tableau;
-
-        return $this;
-    }
-
-    public function getPrises(): ?string
-    {
-        return $this->Prises;
-    }
-
-    public function setPrises(string $Prises): static
-    {
-        $this->Prises = $Prises;
-
-        return $this;
-    }
-
-    public function getTelevision(): ?string
-    {
-        return $this->Television;
-    }
-
-    public function setTelevision(string $Television): static
-    {
-        $this->Television = $Television;
-
-        return $this;
-    }
-
-    public function getClimatisation(): ?string
-    {
-        return $this->Climatisation;
-    }
-
-    public function setClimatisation(string $Climatisation): static
-    {
-        $this->Climatisation = $Climatisation;
+        $this->salles->removeElement($salle);
 
         return $this;
     }
 }
+

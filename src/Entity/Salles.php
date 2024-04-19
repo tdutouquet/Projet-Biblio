@@ -25,6 +25,17 @@ class Salles
     #[ORM\Column]
     private ?bool $disponibilite = null;
 
+    /**
+     * @var Collection<int, Equipements>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipements::class, mappedBy: 'nom')]
+    private Collection $equipements;
+
+    public function __construct()
+    {
+        $this->equipements = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -66,4 +77,32 @@ class Salles
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Equipements>
+     */
+    public function getEquipements(): Collection
+    {
+        return $this->equipements;
+    }
+
+    public function addEquipement(Equipements $equipement): static
+    {
+        if (!$this->equipements->contains($equipement)) {
+            $this->equipements->add($equipement);
+            $equipement->addNom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipement(Equipements $equipement): static
+    {
+        if ($this->equipements->removeElement($equipement)) {
+            $equipement->removeNom($this);
+        }
+
+        return $this;
+    }
+
 }
