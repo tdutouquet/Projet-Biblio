@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Livres;
+use App\Entity\Emprunt;
+use App\Repository\LivresRepository;
+use App\Repository\EmpruntRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\LivresRepository;
-use App\Entity\Livres;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LivresController extends AbstractController
 {
@@ -21,13 +23,17 @@ class LivresController extends AbstractController
     // }
 
     #[Route('/livres', name: 'app_livres')]
-    public function livresListe(LivresRepository $livresRepository): Response
+    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository): Response
     {
 
         $livres = $livresRepository->findAll();
         // faut chercher QUE les livres dispos à afficher
 
+        $emprunts = $empruntRepository->findEnmprunt();
+        // dd($emprunts);
+
         return $this->render('livres/index.html.twig', [
+            'emprunts' => $emprunts,
             'livres' => $livres, 
         ]);
     }
@@ -52,14 +58,31 @@ class LivresController extends AbstractController
         // vérif si livre est disponible
         if($livre->isDisponibilite()){
             // user reserve le livre
-            $livre->setReservePar($user);
+
+            $dateDebut = new \DateTime();
+            // clone  = pour cloner date de début dans autre objet car DateTime est un obj mutable, clone pour ne pas impacter sa variable de base
+            $dateFin = (clone $dateDebut)->modify('+6 day');
+            // dd($dateDebut, $dateFin);
+
+
+            // créer nouvel emprunt
+            $emprunt = new Emprunt();
+
+            $emprunt->setLivres($livre);
+            $emprunt->setUser($user);
+            $emprunt->setDateDebut($dateDebut);
+            $emprunt->setDateFin($dateFin);
+            $emprunt->setExtension(false);
+
+            // mettre à jour livre concerné par l'emprunt
             $livre->setDisponibilite(false); // livre est maintenant indisponible
 
+            $entityManager->persist($emprunt);
             // enregistrement en bdd
             $entityManager->flush();
 
-            // redirection vers la page détails du livre + msg succès
-            return $this->redirectToRoute('app_livre_details', ['id' => $livre->getId()], Response::HTTP_SEE_OTHER);
+            // redirection vers la page des livres
+            return $this->redirectToRoute('app_livres');
         } else {
             // Redirection vers page d'accueil + msg d'erreur
             return $this->redirectToRoute('app_livres', [], Response::HTTP_SEE_OTHER);

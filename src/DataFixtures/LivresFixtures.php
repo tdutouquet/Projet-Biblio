@@ -26,7 +26,7 @@ class LivresFixtures extends Fixture
             $livre->setResume($faker->text());
             $livre->setImage($faker->imageUrl());
             $livre->setCategorie($faker->word());
-            $livre->setDisponibilite($faker->boolean());
+            $livre->setDisponibilite($faker->boolean(true));
             $livre->setNote($faker->numberBetween(0, 5));
 
             // Sélection aléatoire pour l'etat du livre
