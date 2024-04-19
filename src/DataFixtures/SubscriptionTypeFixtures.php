@@ -10,7 +10,7 @@ class SubscriptionTypeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // 1st type of subscribtion (monthly)
+        // 1st type of subscription (monthly)
         $subType = new SubscriptionType();
         $subType->setName('Mensuel');
         $subType->setPrice(23.99);
@@ -19,7 +19,7 @@ class SubscriptionTypeFixtures extends Fixture
 
         $this->addReference('subType-monthly', $subType);
 
-        // 2nd type of subscribtion (yearly)
+        // 2nd type of subscription (yearly)
         $subType = new SubscriptionType();
         $subType->setName('Annuel');
         $subType->setPrice(259.99);

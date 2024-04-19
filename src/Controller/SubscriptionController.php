@@ -34,7 +34,7 @@ class SubscriptionController extends AbstractController
         if ($type == 'monthly') {
             $yearlySubscription = new Subscription();
             $yearlySubscription->setEndDate(new \DateTime('+1 year'));
-            $yearlySubscription->setSubscriptionType(1);
+            // $yearlySubscription->setSubscriptionType(1);
             $yearlySubscription->setUser($user);
 
             $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
@@ -43,7 +43,7 @@ class SubscriptionController extends AbstractController
         if ($type == 'yearly') {
             $yearlySubscription = new Subscription();
             $yearlySubscription->setEndDate(new \DateTime('+1 year'));
-            $yearlySubscription->setSubscriptionType(2);
+            // $yearlySubscription->setSubscriptionType(2);
             $yearlySubscription->setUser($user);
 
             $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
