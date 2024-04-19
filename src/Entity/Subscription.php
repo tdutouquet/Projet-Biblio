@@ -15,7 +15,7 @@ class Subscription
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'Subscription')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?SubscriptionType $SubscriptionType = null;
 
     #[ORM\ManyToOne(inversedBy: 'Subscription')]
