@@ -24,7 +24,10 @@ class AccountController extends AbstractController
         }
         
         $sub = $subRepo->findOneBy(['user' => $user]);
-        $historiqueEmprunts = $empruntRepository->findBy(['user' => $user]);
+        $historiqueEmprunts = $empruntRepository->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
         $comments = $comRepo->findBy(
             ['user' => $user],
             ['id' => 'DESC']
