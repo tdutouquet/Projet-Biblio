@@ -5,25 +5,54 @@
 
 {% block body %}
 	<main class="w-75 mx-auto">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success" role="alert">
+				{{ message }}
+			</div>
+		{% endfor %}
 		<h1 class="mb-3">Mon compte</h1>
 		<div class="alert alert-light" role="alert">
-			<strong>Bienvenue dans votre espace personnel, {{ user.firstname }}</strong> ! Ici, vous pouvez modifier vos informations personnelles et consulter l'historique de vos emprunts.
+			<strong>Bienvenue dans votre espace personnel,
+				{{ user.firstname }}</strong>
+			! Ici, vous pouvez modifier vos informations personnelles et consulter l'historique de vos emprunts.
 		</div>
 
-        {# Informations personnelles #}
-		<h2 class="border-bottom pb-2 mt-5 mb-3">Informations personnelles</h2>
-		<p><strong>Nom</strong> :
+		{# Informations personnelles #}
+		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes informations personnelles</h2>
+		<p>
+			<strong>Nom</strong>
+			:
 			{{ user.firstname ~ ", " ~ user.lastname }}</p>
-		<p><strong>Email</strong> :
+		<p>
+			<strong>Email</strong>
+			:
 			{{ user.email }}</p>
-		<p><strong>Adresse</strong> :
+		<p>
+			<strong>Adresse</strong>
+			:
 			{{user.address ~ ", " ~ user.city ~ ", " ~ user.zipcode}}</p>
-        <p><strong>Téléphone</strong> :
-            {{user.phone}}</p>
-        <a href="{{ path('app_account_edit') }}" class="btn btn-primary">Modifier mes informations</a>
+		<p>
+			<strong>Téléphone</strong>
+			:
+			{{user.phone}}</p>
+		<a href="{{ path('app_account_edit') }}" class="btn btn-primary">Modifier mes informations</a>
 
-        {# Historique d'emprunts #}
-        <h2 class="border-bottom pb-2 mt-5 mb-3">Historique d'emprunts</h2>
+		{# Abonnement #}
+		<h2 class="border-bottom pb-2 mt-5 mb-3">Mon abonnement</h2>
+		{% if subscription is null %}
+			<p>Vous n'avez pas d'abonnement. Abonnez-vous <a href="{{ path('app_subscription')}}">en deux clics ici</a> !
+		{% else %}
+		<p>
+			<strong>Date de début</strong>
+			:
+			{{ subscription.startDate|date('d-m-Y') }}
+		</p>
+		<p>
+			<strong>Date de fin</strong>
+			:
+			{{ subscription.endDate|date('d-m-Y') }}
+		</p>
+		{% endif %}
 
 		{% if historiqueEmprunts is empty %}
 			<p>Aucun emprunt enregistré.</p>
@@ -89,9 +118,30 @@
     </div>
 </div> #}
 
+		{# Historique d'emprunts
+		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes emprunts de livres</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Livre</th>
+					<th scope="col">Date de début</th>
+					<th scope="col">Date de fin</th>
+					<th scope="col">Extension</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for emprunt in emprunts %}
+					<tr>
+						<td scope="row">{{emprunt.livres.titre}}</td>
+						<td>{{emprunt.dateDebut|date('d-m-Y')}}</td>
+						<td>{{emprunt.dateFin|date('d-m-Y')}}</td>
+						<td>@{{emprunt.extension}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table> #}
 
-
-        {# Historique de lcoation #}
-        <h2 class="border-bottom pb-2 mt-5 mb-3">Historique de locations</h2>
+		{# Historique de lcoation #}
+		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes locations de salles</h2>
 	</main>
 {% endblock %}

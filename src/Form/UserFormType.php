@@ -4,9 +4,10 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class UserFormType extends AbstractType
 {
@@ -23,7 +24,9 @@ class UserFormType extends AbstractType
             ->add('birthdate', null, [
                 'widget' => 'single_text',
             ])
-            ->add('is_banned')
+            ->add('is_banned', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
