@@ -39,14 +39,20 @@
 
 		{# Abonnement #}
 		<h2 class="border-bottom pb-2 mt-5 mb-3">Mon abonnement</h2>
+		{% if subscription is null %}
+			<p>Vous n'avez pas d'abonnement. Abonnez-vous <a href="{{ path('app_subscription')}}">en deux clics ici</a> !
+		{% else %}
 		<p>
 			<strong>Date de début</strong>
 			:
-			{{ subscription.startDate|date('d-m-Y') }}</p>
+			{{ subscription.startDate|date('d-m-Y') }}
+		</p>
 		<p>
 			<strong>Date de fin</strong>
 			:
-			{{ subscription.endDate|date('d-m-Y') }}</p>
+			{{ subscription.endDate|date('d-m-Y') }}
+		</p>
+		{% endif %}
 
 		{# Historique d'emprunts #}
 		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes emprunts de livres</h2>
@@ -62,7 +68,7 @@
 			<tbody>
 				{% for emprunt in emprunts %}
 					<tr>
-						<th scope="row">{{emprunt.livres.titre}}</th>
+						<td scope="row">{{emprunt.livres.titre}}</td>
 						<td>{{emprunt.dateDebut|date('d-m-Y')}}</td>
 						<td>{{emprunt.dateFin|date('d-m-Y')}}</td>
 						<td>@{{emprunt.extension}}</td>
