@@ -135,5 +135,18 @@
 
 		{# Historique de lcoation #}
 			<h2 class="border-bottom pb-2 mt-5 mb-3"> Mes locations de salles</h2>
+		
+		{# Derniers commentaires #}
+			<h2 class="border-bottom pb-2 mt-5 mb-3"> Mes derniers commentaires</h2>
+			{% if comments is empty %}
+			<p>On dirait que vous n'avez laissé aucun commentaire. Prenez votre plume et foncez corriger ça !</p>
+			{% else %}
+				{% for comment in comments|slice(0, 5) %}
+					<div>
+						<h3 class="h6">Commentaire laissé le {{ comment.createdAt|date('d-m-Y') }} à propos de "{{ comment.livre.titre }}"</h3>
+						<p>{{ comment.content }}</p>
+					</div>
+				{% endfor %}
+			{% endif %}
 	</main>
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Emprunt;
 use App\Form\AccountFormType;
+use App\Repository\CommentRepository;
 use App\Repository\EmpruntRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SubscriptionRepository;
@@ -16,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository): Response
+    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo): Response
     {
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
@@ -24,7 +25,10 @@ class AccountController extends AbstractController
         
         $sub = $subRepo->findOneBy(['user' => $user]);
         $historiqueEmprunts = $empruntRepository->findBy(['user' => $user]);
-        // $emp = $empRepo->findBy(['user' => $user]);
+        $comments = $comRepo->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
         // $emprunts = $empRepo->findEmpruntsWithDetailsByUser($user);
 
@@ -33,7 +37,7 @@ class AccountController extends AbstractController
             'user' => $user,
             'historiqueEmprunts' => $historiqueEmprunts,
             'subscription' => $sub,
-            // 'emprunts' => $emprunts,
+            'comments' => $comments,
         ]);
     }
 
