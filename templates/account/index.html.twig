@@ -40,108 +40,101 @@
 		{# Abonnement #}
 		<h2 class="border-bottom pb-2 mt-5 mb-3">Mon abonnement</h2>
 		{% if subscription is null %}
-			<p>Vous n'avez pas d'abonnement. Abonnez-vous <a href="{{ path('app_subscription')}}">en deux clics ici</a> !
-		{% else %}
-		<p>
-			<strong>Date de début</strong>
-			:
-			{{ subscription.startDate|date('d-m-Y') }}
-		</p>
-		<p>
-			<strong>Date de fin</strong>
-			:
-			{{ subscription.endDate|date('d-m-Y') }}
-		</p>
-		{% endif %}
+			<p>Vous n'avez pas d'abonnement. Abonnez-vous
+				<a href="{{ path('app_subscription')}}">en deux clics ici</a>
+				!
+			{% else %}
+				<p>
+					<strong>Date de début</strong>
+					:
+					{{ subscription.startDate|date('d-m-Y') }}
+				</p>
+				<p>
+					<strong>Date de fin</strong>
+					:
+					{{ subscription.endDate|date('d-m-Y') }}
+				</p>
+			{% endif %}
 
-		{% if historiqueEmprunts is empty %}
-			<p>Aucun emprunt enregistré.</p>
-		{% else %}
-			<ul>
-				{% for emprunt in historiqueEmprunts %}
-					<li>Livre : {{ emprunt.livres.titre }}</li>
-					<li>Date de début : {{ emprunt.dateDebut|date("d/m/Y") }}</li>
-					<li>Date de fin : {{ emprunt.dateFin|date("d/m/Y") }}</li>
-					<br>
-					<p>Vous pouvez bénéficier d'une extension de prêt de six jours grâce à votre abonnement. Profitez-en !</p>
-						{# <form action="{{ path('app_account_extension', {'id': emprunt.id}) }}" method="post">
-							<button type="button" class="extension-button" data-toggle="modal" data-target="#extensionModal">Je profite</button>
-						</form> #}
+			{# Historique d'emprunts #}
+			<h2 class="border-bottom pb-2 mt-5 mb-3">Mes emprunts de livres</h2>
+			{% if historiqueEmprunts is empty %}
+				<p>Aucun emprunt enregistré.</p>
+			{% else %}
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Livre</th>
+							<th scope="col">Date de début</th>
+							<th scope="col">Date de fin</th>
+							<th scope="col">Extension</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for emprunt in historiqueEmprunts %}
+							<tr>
+								<td scope="row" class="align-middle">{{emprunt.livres.titre}}</td>
+								<td class="align-middle">{{emprunt.dateDebut|date('d-m-Y')}}</td>
+								<td class="align-middle">{{emprunt.dateFin|date('d-m-Y')}}</td>
+								<td
+									class="align-middle">
+									{# <form action="{{ path('app_account_extension', {'id': emprunt.id}) }}" method="post">
+										<button type="button" class="extension-button" data-toggle="modal" data-target="#extensionModal">Je profite</button>
+										</form> #}
 
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extensionModal">
-            				Je profite
-        				</button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extensionModal">
+										Je profite
+									</button>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% endif %}
 
-				{% endfor %}
-			</ul>
-		{% endif %}
+			<!-- Modal -->
+			{# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
+						        <div class="modal-dialog" role="document">
+						            <div class="modal-content">
+						                <div class="modal-header">
+						                    <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
+						                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                        <span aria-hidden="true">&times;</span>
+						                    </button>
+						                </div>
+						                <div class="modal-body">
+						                    <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
+						                </div>
+						                <div class="modal-footer">
+						                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						                    <button type="submit" class="btn btn-primary">Confirmer</button>
+						                </div>
+						            </div>
+						        </div>
+						    </div> #}
 
-<!-- Modal -->
-    {# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Confirmer</button>
-                </div>
-            </div>
-        </div>
-    </div> #}
-
-<!-- Modal -->
-{# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary">Confirmer</button>
-            </div>
-        </div>
-    </div>
-</div> #}
-
-		{# Historique d'emprunts
-		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes emprunts de livres</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">Livre</th>
-					<th scope="col">Date de début</th>
-					<th scope="col">Date de fin</th>
-					<th scope="col">Extension</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for emprunt in emprunts %}
-					<tr>
-						<td scope="row">{{emprunt.livres.titre}}</td>
-						<td>{{emprunt.dateDebut|date('d-m-Y')}}</td>
-						<td>{{emprunt.dateFin|date('d-m-Y')}}</td>
-						<td>@{{emprunt.extension}}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table> #}
+			<!-- Modal -->
+			{# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
+						    <div class="modal-dialog" role="document">
+						        <div class="modal-content">
+						            <div class="modal-header">
+						                <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
+						                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                    <span aria-hidden="true">&times;</span>
+						                </button>
+						            </div>
+						            <div class="modal-body">
+						                <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
+						            </div>
+						            <div class="modal-footer">
+						                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						                <button type="button" class="btn btn-primary">Confirmer</button>
+						            </div>
+						        </div>
+						    </div>
+						</div> #}
 
 		{# Historique de lcoation #}
-		<h2 class="border-bottom pb-2 mt-5 mb-3">Mes locations de salles</h2>
+			<h2 class="border-bottom pb-2 mt-5 mb-3"> Mes locations de salles</h2>
 	</main>
 {% endblock %}

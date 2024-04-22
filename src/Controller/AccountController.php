@@ -21,8 +21,9 @@ class AccountController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }
-
+        
         $sub = $subRepo->findOneBy(['user' => $user]);
+        $historiqueEmprunts = $empruntRepository->findBy(['user' => $user]);
         // $emp = $empRepo->findBy(['user' => $user]);
 
         // $emprunts = $empRepo->findEmpruntsWithDetailsByUser($user);
@@ -30,7 +31,7 @@ class AccountController extends AbstractController
         return $this->render('account/index.html.twig', [
             'controller_name' => 'AccountController',
             'user' => $user,
-            'historiqueEmprunts' => $historiqueEmprunts
+            'historiqueEmprunts' => $historiqueEmprunts,
             'subscription' => $sub,
             // 'emprunts' => $emprunts,
         ]);
