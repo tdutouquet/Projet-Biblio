@@ -31,6 +31,11 @@ class Comment
     #[ORM\Column]
     private ?float $rating = null;
 
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

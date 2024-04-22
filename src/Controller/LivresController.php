@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Livres;
+use App\Entity\Comment;
 use App\Entity\Emprunt;
+use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use App\Repository\LivresRepository;
 use App\Repository\EmpruntRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,10 +94,36 @@ class LivresController extends AbstractController
     }
 
     #[Route('/livres/details/{id}', name: 'app_livres_details')]
-    public function details(Livres $livre): Response
+    public function details(Livres $livre, Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        // Display comments
+        $commentsList = $livre->getComments();
+
+        // Add comment form
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setLivre($livre);
+            $comment->setUser($user);
+            $comment->setContent($commentForm->get('content')->getData());
+            $comment->setRating($commentForm->get('rating')->getData());
+            $em->persist($comment);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre commentaire a été ajouté');
+            return $this->redirectToRoute('app_livres_details', [
+                'id' => $livre->getId(),
+            ]);
+        }
+
         return $this->render('livres/details.html.twig', [
             'livre' => $livre,
+            'commentForm' => $commentForm->createView(),
+            'comments' => $commentsList,
         ]);
     }
 

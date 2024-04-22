@@ -1,28 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails du livre{% endblock %}
+{% block title %}Détails du livre
+{% endblock %}
 
 {% block body %}
-<main>
-    <div class="container">
-        <h1 class="titreDetails">Détails du livre</h1>
-        <div>
-            <h3 class="h3Details">{{ livre.titre }}</h3>
-            <p class="pDetails">Auteur : {{ livre.auteur }}</p>
-            <p class="pDetails">Année de publication : {{ livre.anneePublication }}</p>
-
-            
-            <style>
-                .titreDetails{
-                    text-align: center;
-                    font-size: 2rem;
-                }
-
-
-            </style>
-
-
-        </div>
-    </div>
-</main>
-{% endblock %}
+	<main>
+		<div class="container">
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success" role="alert">
+					{{ message }}
+				</div>
+			{% endfor %}
+			<h1 class="text-center">Détails du livre</h1>
+			<div>
+				<h2>{{ livre.titre }}</h2>
+				<p>Auteur :
+					{{ livre.auteur }}</p>
+				<p>Année de publication :
+					{{ livre.anneePublication }}</p>
+			</div>
+			<hr class="mt-5">
+			<section>
+				<h2>Avis ({{ comments|length }})</h2>
+				<h3 class="h4">Ajouter un commentaire</h3>
+				{{ form(commentForm) }}
+                <h3 class="h4 mt-4">Commentaires d'utilisateurs</h3>
+                {% for comment in comments %}
+                    <div>
+                        <h4 class="h5">Commentaire de
+                            {{ comment.user.firstname }}</h4>
+                        <p>
+                            <strong>Note :</strong>
+                            {{ comment.rating }}</p>
+                        <p>{{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+				</section>
+			</div>
+		</main>
+	{% endblock %}
