@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du livre{% endblock %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <h1 class="titreDetails">Détails du livre</h1>
+        <div>
+            <h3 class="h3Details">{{ livre.titre }}</h3>
+            <p class="pDetails">Auteur : {{ livre.auteur }}</p>
+            <p class="pDetails">Année de publication : {{ livre.anneePublication }}</p>
+
+            
+            <style>
+                .titreDetails{
+                    text-align: center;
+                    font-size: 2rem;
+                }
+
+
+            </style>
+
+
+        </div>
+    </div>
+</main>
+{% endblock %}

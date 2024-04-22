@@ -25,6 +25,72 @@
         {# Historique d'emprunts #}
         <h2 class="border-bottom pb-2 mt-5 mb-3">Historique d'emprunts</h2>
 
+		{% if historiqueEmprunts is empty %}
+			<p>Aucun emprunt enregistré.</p>
+		{% else %}
+			<ul>
+				{% for emprunt in historiqueEmprunts %}
+					<li>Livre : {{ emprunt.livres.titre }}</li>
+					<li>Date de début : {{ emprunt.dateDebut|date("d/m/Y") }}</li>
+					<li>Date de fin : {{ emprunt.dateFin|date("d/m/Y") }}</li>
+					<br>
+					<p>Vous pouvez bénéficier d'une extension de prêt de six jours grâce à votre abonnement. Profitez-en !</p>
+						{# <form action="{{ path('app_account_extension', {'id': emprunt.id}) }}" method="post">
+							<button type="button" class="extension-button" data-toggle="modal" data-target="#extensionModal">Je profite</button>
+						</form> #}
+
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#extensionModal">
+            				Je profite
+        				</button>
+
+				{% endfor %}
+			</ul>
+		{% endif %}
+
+<!-- Modal -->
+    {# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div> #}
+
+<!-- Modal -->
+{# <div class="modal fade" id="extensionModal" tabindex="-1" role="dialog" aria-labelledby="extensionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="extensionModalLabel">Confirmation d'extension</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Souhaitez-vous prolonger la durée de l'emprunt ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary">Confirmer</button>
+            </div>
+        </div>
+    </div>
+</div> #}
+
+
+
         {# Historique de lcoation #}
         <h2 class="border-bottom pb-2 mt-5 mb-3">Historique de locations</h2>
 	</main>

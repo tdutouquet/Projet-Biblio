@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Form\AccountFormType;
+use App\Repository\EmpruntRepository;
+use App\Entity\Emprunt;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +15,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(UserInterface $user): Response
+    public function index(UserInterface $user, EmpruntRepository $empruntRepository): Response
     {
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }
 
+        $historiqueEmprunts = $empruntRepository->findBy(['user' => $user]);
+
         return $this->render('account/index.html.twig', [
             'controller_name' => 'AccountController',
-            'user' => $user
+            'user' => $user,
+            'historiqueEmprunts' => $historiqueEmprunts
         ]);
     }
 
@@ -50,4 +55,34 @@ class AccountController extends AbstractController
             'accountForm' => $accountForm->createView()
         ]);
     }
+
+    #[Route('/compte/extension/{id}', name: 'app_account_extension')]
+    public function extension(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $emprunt = $entityManager->getRepository(Emprunt::class)->find($id);
+
+        // vérif si emprunt existe
+        if (!$emprunt) {
+            throw $this->createNotFoundException('Emprunt non trouvé.');
+        }
+
+        // vérif si user peut demander une extension
+        if($emprunt->isExtension()) {
+            // si extension a déjà été demandée
+            $this->addFlash('warning', 'Une extension a déjà été demandée pour ce livre ? cet emprunt ?');
+        } elseif (!$emprunt->isEligiblePourExtension()) {
+            // si extension n'est pas possible
+            $this->addFlash('warning', 'Extension impossible pour ce livre.');
+        } else {
+            // si user peut faire l'extension
+            $emprunt->setExtension(true);
+            $newDateFin = (clone $emprunt->getDateFin())->modify('+6 day');
+            $emprunt->setDateFin($newDateFin);
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Extension effectuee avec succès.');
+        }
+    }
+
 }
