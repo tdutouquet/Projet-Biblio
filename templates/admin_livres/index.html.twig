@@ -1,51 +1,126 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livres index{% endblock %}
+{% block title %}Liste des livres{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+
+        .table-container {
+            margin-top: 2rem;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        h1{
+            text-align: center;
+        }
+
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn:active {
+            background-color: #0056b3;
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        }
+    </style>
+
+{% endblock %}
 
 {% block body %}
-    <h1>Livres index</h1>
+
+    <div class="table-container">
+
+    <h1>Liste des livres</h1>
+
+    <a href="{{ path('app_livres_nonrestitue') }}" class="btn">Afficher les livres non restitués</a>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>AnneePublication</th>
-                <th>MaisonEdition</th>
-                <th>Resume</th>
                 <th>Image</th>
+                <th>Titre</th>
                 <th>Categorie</th>
                 <th>Disponibilite</th>
-                <th>Note</th>
-                <th>actions</th>
+                {# <th>Actions</th> #}
+                <th>Emprunté par</th>
+                <th>Début</th>
+                <th>Fin prévue</th>
+                
+
             </tr>
         </thead>
         <tbody>
         {% for livre in livres %}
             <tr>
-                <td>{{ livre.id }}</td>
-                <td>{{ livre.titre }}</td>
-                <td>{{ livre.auteur }}</td>
-                <td>{{ livre.anneePublication }}</td>
-                <td>{{ livre.maisonEdition }}</td>
-                <td>{{ livre.resume }}</td>
                 <td>{{ livre.image }}</td>
+                <td>{{ livre.titre }}</td>
                 <td>{{ livre.categorie }}</td>
-                <td>{{ livre.disponibilite ? 'Yes' : 'No' }}</td>
-                <td>{{ livre.note }}</td>
+                <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
                 <td>
-                    <a href="{{ path('app_admin_livres_show', {'id': livre.id}) }}">show</a>
-                    <a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}">edit</a>
+                    {% if livre.emprunts|length > 0 %}
+                        {{ livre.emprunts.first().user.firstname }} {{ livre.emprunts.first().user.lastname }}
+                    {% else %}
+                        Non emprunté.
+                    {% endif %}
+
+                </td>
+                <td>{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateDebut|date('Y-m-d') : 'Non disponible' }}</td>
+                <td>{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateFin|date('Y-m-d') : 'Non disponible' }}</td>
+
+
+                <td>
+                    <a href="{{ path('app_admin_livres_show', {'id': livre.id}) }}" class="btn">Show</a>
+                    <a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}" class="btn">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="11">no records found</td>
+                <td colspan="11">No records found.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_livres_new') }}">Create new</a>
+    </div>
+
+    <a href="{{ path('app_admin_livres_new') }}" class="btn">Create new</a>
+
+
 {% endblock %}

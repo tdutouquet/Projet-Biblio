@@ -87,6 +87,25 @@ class LivresController extends AbstractController
             // Redirection vers page d'accueil + msg d'erreur
             return $this->redirectToRoute('app_livres', [], Response::HTTP_SEE_OTHER);
         }
+
+    }
+
+    #[Route('/livres/details/{id}', name: 'app_livres_details')]
+    public function details(Livres $livre): Response
+    {
+        return $this->render('livres/details.html.twig', [
+            'livre' => $livre,
+        ]);
+    }
+
+    #[Route('/admin/livres/non-restitues', name: 'app_livres_nonrestitue')]
+    public function livresNonRestitue(): Response
+    {
+        $livresNonRestitues = $this->getDoctrine()->getRepository(Livres::class)->findLivresNonRestitues();
+
+        return $this->render('admin_livres/nonrestitues.html.twig', [
+            'livres' => $livresNonRestitues,
+        ]);
     }
 
 }

@@ -110,4 +110,18 @@ class Emprunt
 
         return $this;
     }
+
+    public function isEligiblePourExtension(): bool
+    {
+        if($this->extension){
+            return false;
+        }
+
+        $now = new \DateTime();
+        if($this->dateFin > $now){
+            return true;
+        }
+
+        return false;
+    }
 }
