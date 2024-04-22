@@ -1,80 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livres disponibles{% endblock %}
+{% block title %}Livres disponibles
+{% endblock %}
 
 {% block body %}
-<style>
+	<style>
 
-.table{
-    background-color: pink;
-}
+		.table {
+			background-color: pink;
+		}
+	</style>
+
+	<main>
+		<div class="container text-center">
+			<h1>Liste des livres</h1>
+			<figure style="max-height: 200px; width: 100%;">
+				<img src="https://source.unsplash.com/random/?pages" alt="Books" class="img-fluid object-fit-cover rounded" style="object-position: left top;">
+			</figure>
+			<div class="row">
+				<div class="col">
+
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Titre</th>
+								<th>Auteur</th>
+								<th>Année de publication</th>
+								{# <th>Maison d'édition</th> #}
+								{# <th>Résumé</th> #}
+								{# <th>Image</th> #}
+								{# <th>Catégorie</th> #}
+								<th>Note</th>
+								<th>Disponibilité</th>
+								{# <th>Etat</th> #}
+								<th>Détails</th>
+								<th>Réserver</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for livre in livres %}
+								<tr>
+									<td class="align-middle">{{ livre.titre }}</td>
+									<td class="align-middle">{{ livre.auteur }}</td>
+									<td class="align-middle">{{ livre.anneePublication }}</td>
+									{# <td>{{ livre.maisonEdition }}</td> #}
+									{# <td>{{ livre.resume }}</td> #}
+									{# <td>
+									                            <img>{{ livre.image }}<img>
+									                            </td> #}
+									{# <td>{{ livre.categorie }}</td> #}
+									<td class="align-middle">{{ livre.note }}
+										/ 5</td>
+									<td class="align-middle">
+										<span class="badge rounded-pill text-bg-{{ livre.disponibilite ? 'success' : 'danger' }}">{{ livre.disponibilite ? 'Oui' : 'Non' }}</span>
+									</td>
+									{# <td>{{ livre.etat }}</td> #}
+									<td class="align-middle">
+										<a href="{{ path("app_livres_details", {'id': livre.id }) }}">Plus de détails</a>
+									</td>
+									<td class="align-middle">
+										<form action="{{ path('app_livre_reserve', {'id': livre.id}) }}" method="post">
+											{% set empruntEnCours = emprunts[livre.id] ?? null %}
+											{% if not empruntEnCours or livre.disponibilite %}
+												<button type="submit" class="btn btn-sm btn-primary">Je veux réserver</button>
+											{% else %}
+												<span>Dispo à partir de :
+													{{ empruntEnCours.dateFin|date("d/m/Y") }}</span>
+											{% endif %}
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 
 
-</style>
-
-{# CHANGER div en main car avec balise main, a fait en sorte de prendre une certaine hauteur de page #}
-<main>
-
-<div class="container text-center">
-    <h1>Liste des livres</h1>
-    
-    <div class="row">
-        <div class="col">
-        
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Auteur</th>
-                        <th>Année de publication</th>
-                        {# <th>Maison d'édition</th> #}
-                        <th>Résumé</th>
-                        {# <th>Image</th> #}
-                        {# <th>Catégorie</th> #}
-                        <th>Disponibilité</th>
-                        <th>Détails</th>
-                        <th>Note</th>
-                        {# <th>Etat</th> #}
-                        <th>Réserver</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for livre in livres %}
-                        <tr>
-                            <td>{{ livre.titre }}</td>
-                            <td>{{ livre.auteur }}</td>
-                            <td>{{ livre.anneePublication }}</td>
-                            {# <td>{{ livre.maisonEdition }}</td> #}
-                            <td>{{ livre.resume }}</td>
-                            {# <td>
-                            <img>{{ livre.image }}<img>
-                            </td> #}
-                            {# <td>{{ livre.categorie }}</td> #}
-                            <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
-                            <td>
-                                <a href="{{ path("app_livres_details", {'id': livre.id }) }}">Plus de détails</a>
-                            </td>
-                            <td>{{ livre.note }} / 5</td>
-                            {# <td>{{ livre.etat }}</td> #}
-                            <td>
-                                <form action="{{ path('app_livre_reserve', {'id': livre.id}) }}" method="post">
-                                    {% set empruntEnCours = emprunts[livre.id] ?? null %}
-                                    {% if not empruntEnCours or livre.disponibilite %}
-                                    <button type="submit">Je veux réserver</button>
-                                    {% else %}
-                                    <span>Livre dispo à partir de : {{ empruntEnCours.dateFin|date("d/m/Y") }}</span>
-                                    {% endif %}
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-</main>
+	</main>
 {% endblock %}
