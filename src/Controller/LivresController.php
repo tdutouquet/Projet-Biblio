@@ -9,6 +9,7 @@ use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\LivresRepository;
 use App\Repository\EmpruntRepository;
+use App\Repository\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,27 +18,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LivresController extends AbstractController
 {
-    // #[Route('/livres', name: 'app_livres')]
-    // public function index(): Response
-    // {
-    //     return $this->render('livres/index.html.twig', [
-    //         'controller_name' => 'LivresController',
-    //     ]);
-    // }
-
     #[Route('/livres', name: 'app_livres')]
-    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository): Response
+    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository, SubscriptionRepository $subRepo): Response
     {
 
         $livres = $livresRepository->findAll();
-        // faut chercher QUE les livres dispos à afficher
-
         $emprunts = $empruntRepository->findEnmprunt();
-        // dd($emprunts);
+        $user = $this->getUser();
+        $subs = $subRepo->findBy(['user' => $user]);
+        $flag = false;
+
+        foreach ($subs as $sub) {
+            $today = new \DateTime();
+            if ($today >= $sub->getStartDate() && $today <= $sub->getEndDate()) {
+                $flag = true;
+                break;
+            }
+        }
 
         return $this->render('livres/index.html.twig', [
             'emprunts' => $emprunts,
             'livres' => $livres, 
+            'flag' => $flag,
         ]);
     }
 
@@ -83,6 +85,9 @@ class LivresController extends AbstractController
             $entityManager->persist($emprunt);
             // enregistrement en bdd
             $entityManager->flush();
+
+            // Ajouter flash message
+            $this->addFlash('success', 'Votre emprunt a bien été enregistré');
 
             // redirection vers la page des livres
             return $this->redirectToRoute('app_livres');

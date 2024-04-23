@@ -29,28 +29,32 @@
 								{# <th>Maison d'édition</th> #}
 								{# <th>Résumé</th> #}
 								{# <th>Image</th> #}
-								{# <th>Catégorie</th> #}
-								<th>Note</th>
-								<th>Disponibilité</th>
-								{# <th>Etat</th> #}
-								<th>Détails</th>
-								<th>Réserver</th>
-							</tr>
+								{# <th>Catégorie</th> #}<th>
+								Note
+								</th><th>
+								Disponibilité
+								</th>
+								{# <th>Etat</th> #}<th>
+								Détails
+								</th><th>
+								Réserver
+							</th>
+						</tr>
 						</thead>
 
-						<tbody>
-							{% for livre in livres %}
-								<tr>
-									<td class="align-middle">{{ livre.titre }}</td>
+							<tbody>
+								{% for livre in livres %}
+									<tr>
+										<td class="align-middle"> {{ livre.titre }}</td>
 									<td class="align-middle">{{ livre.auteur }}</td>
 									<td class="align-middle">{{ livre.anneePublication }}</td>
 									{# <td>{{ livre.maisonEdition }}</td> #}
 									{# <td>{{ livre.resume }}</td> #}
 									{# <td>
-									                            <img>{{ livre.image }}<img>
-									                            </td> #}
+																			<img>{{ livre.image }}<img>
+																			</td> #}
 									{# <td>{{ livre.categorie }}</td> #}
-									<td class="align-middle">{{ livre.note }}
+										<td class="align-middle"> {{ livre.note }}
 										/ 5</td>
 									<td class="align-middle">
 										<span class="badge rounded-pill text-bg-{{ livre.disponibilite ? 'success' : 'danger' }}">{{ livre.disponibilite ? 'Oui' : 'Non' }}</span>
@@ -60,15 +64,23 @@
 										<a href="{{ path("app_livres_details", {'id': livre.id }) }}">Plus de détails</a>
 									</td>
 									<td class="align-middle">
-										<form action="{{ path('app_livre_reserve', {'id': livre.id}) }}" method="post">
-											{% set empruntEnCours = emprunts[livre.id] ?? null %}
-											{% if not empruntEnCours or livre.disponibilite %}
-												<button type="submit" class="btn btn-sm btn-primary">Je veux réserver</button>
+										{% if app.user %}
+											{% if flag %}
+												<form action="{{ path('app_livre_reserve', {'id': livre.id}) }}" method="post">
+													{% set empruntEnCours = emprunts[livre.id] ?? null %}
+													{% if not empruntEnCours or livre.disponibilite %}
+														<button type="submit" class="btn btn-sm btn-primary">Réserver</button>
+													{% else %}
+														<span>Dispo à partir de :
+															{{ empruntEnCours.dateFin|date("d/m/Y") }}</span>
+													{% endif %}
+												{% else %}
+													<a href="{{ path('app_subscription') }}" class="btn btn-sm btn-primary">S'abonner pour réserver</a>
+												{% endif %}
 											{% else %}
-												<span>Dispo à partir de :
-													{{ empruntEnCours.dateFin|date("d/m/Y") }}</span>
-											{% endif %}
-										</form>
+												<a href="{{ path('app_login') }}" class="btn btn-sm btn-primary">Se connecter pour réserver</a>
+											</form>
+										{% endif %}
 									</td>
 								</tr>
 							{% endfor %}
