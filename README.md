@@ -1,6 +1,6 @@
 # Projet MyBiblio
 
-## Project setup
+## Setup
 
 Le projet MyBiblio contient des fixtures pour plusieurs entités, notamment les utilisateurs et les livres.
 
