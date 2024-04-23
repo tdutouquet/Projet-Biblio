@@ -22,11 +22,11 @@
 			<hr class="mt-5">
 			<section>
 				<h2>Avis ({{ comments|length }})</h2>
-				<h3 class="h4">Ajouter un commentaire</h3>
+				<h3 class="h4 mt-4 mb-3">Ajouter un commentaire</h3>
 				{{ form(commentForm) }}
-                <h3 class="h4 mt-4">Commentaires d'utilisateurs</h3>
+                <h3 class="h4 mt-5 mb-3">Commentaires d'utilisateurs</h3>
                 {% for comment in comments %}
-                    <div>
+                    <div class="card p-3 mb-3">
                         <h4 class="h5">Commentaire de
                             {{ comment.user.firstname }}</h4>
                         <p>
