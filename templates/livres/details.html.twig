@@ -33,9 +33,34 @@
                             <strong>Note :</strong>
                             {{ comment.rating }}</p>
                         <p>{{ comment.content }}</p>
+						{% if app.user and is_granted('ROLE_ADMIN') %}
+							<a href="{{ path('app_comment_admin_delete', {'id': comment.id}) }}" class="btn btn-danger delete-btn btn-sm" data-id="{{ comment.id }}" style="max-width: 100px;">Supprimer</a>
+						{% endif %}
                     </div>
                 {% endfor %}
 				</section>
 			</div>
 		</main>
 	{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            const id = button.getAttribute('data-id');
+            
+            const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?');
+            
+            if (isConfirmed) {
+                window.location.href = button.getAttribute('href');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
