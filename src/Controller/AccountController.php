@@ -6,6 +6,7 @@ use App\Entity\Emprunt;
 use App\Form\AccountFormType;
 use App\Repository\CommentRepository;
 use App\Repository\EmpruntRepository;
+use App\Repository\RentalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SubscriptionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,23 +18,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo): Response
+    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo, RentalRepository $rentalRepo): Response
     {
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }
         
         $sub = $subRepo->findOneBy(['user' => $user]);
+        
         $historiqueEmprunts = $empruntRepository->findBy(
             ['user' => $user],
             ['id' => 'DESC']
         );
+       
         $comments = $comRepo->findBy(
             ['user' => $user],
             ['id' => 'DESC']
         );
 
-        // $emprunts = $empRepo->findEmpruntsWithDetailsByUser($user);
+        $rentals = $rentalRepo->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
         return $this->render('account/index.html.twig', [
             'controller_name' => 'AccountController',
@@ -41,6 +47,7 @@ class AccountController extends AbstractController
             'historiqueEmprunts' => $historiqueEmprunts,
             'subscription' => $sub,
             'comments' => $comments,
+            'rentals' => $rentals
         ]);
     }
 

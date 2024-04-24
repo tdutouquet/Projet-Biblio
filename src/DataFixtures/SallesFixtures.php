@@ -19,7 +19,7 @@ class SallesFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 10; $i++) {
             $salle = new Salles();
-            $salle->setNom($faker->sentence(3));
+            $salle->setNom($faker->word());
             $salle->setCapacite($faker->numberBetween(1, 10));
             $salle->setDisponibilite($faker->boolean());
             $salle->setEmplacement($faker->numberBetween(1, 10));
