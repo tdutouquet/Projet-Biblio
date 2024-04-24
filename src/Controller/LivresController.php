@@ -135,10 +135,10 @@ class LivresController extends AbstractController
     #[Route('/admin/livres/non-restitues', name: 'app_livres_nonrestitue')]
     public function livresNonRestitue(): Response
     {
-        $livresNonRestitues = $this->getDoctrine()->getRepository(Livres::class)->findLivresNonRestitues();
+        // $livresNonRestitues = $this->getDoctrine()->getRepository(Livres::class)->findLivresNonRestitues();
 
         return $this->render('admin_livres/nonrestitues.html.twig', [
-            'livres' => $livresNonRestitues,
+            // 'livres' => $livresNonRestitues,
         ]);
     }
 

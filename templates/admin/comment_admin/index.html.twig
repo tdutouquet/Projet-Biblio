@@ -3,6 +3,9 @@
 {% block title %}Admin - Commentaires
 {% endblock %}
 
+{% block knp %}
+{% endblock %}
+
 {% block body %}
 	<main class="d-flex flex-column align-items-center">
 		{% include '_partials/_adminnav.html.twig' %}
@@ -21,46 +24,50 @@
 					<th>Utilisateur</th>
 					<th>Livre</th>
 					<th>Commentaire</th>
-                    <th>Note</th>
+					<th>Note</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for comment in comments %}
+				{% for comment in pagination %}
 					<tr>
 						<td class="align-middle">{{ comment.createdAt|date('d-m-Y') }}</td>
 						<td class="align-middle">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</td>
 						<td class="align-middle">{{ comment.livre.titre }}</td>
 						<td class="align-middle">{{ comment.content }}</td>
-						<td class="align-middle">{{ comment.rating }} / 5</td>
+						<td class="align-middle">{{ comment.rating }}
+							/ 5</td>
 						<td class="align-middle">
-							<a href="{{ path('app_comment_admin_delete', {'id': comment.id}) }}" class="btn btn-danger delete-btn" data-id="{{ comment.id }}">Supprimer</a>
+							<a href="{{ path('app_comment_admin_delete', {'id': comment.id}) }}" class="btn btn-danger btn-sm delete-btn" data-id="{{ comment.id }}">Supprimer</a>
 						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
+		<nav class="mt-4">
+			{{ knp_pagination_render(pagination) }}
+		</nav>
 	</main>
 {% endblock %}
 
 {% block script %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const deleteButtons = document.querySelectorAll('.delete-btn');
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            const id = button.getAttribute('data-id');
-            
-            const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?');
-            
-            if (isConfirmed) {
-                window.location.href = button.getAttribute('href');
-            }
-        });
-    });
+deleteButtons.forEach(button => {
+button.addEventListener('click', function (event) {
+event.preventDefault();
+
+const id = button.getAttribute('data-id');
+
+const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?');
+
+if (isConfirmed) {
+window.location.href = button.getAttribute('href');
+}
 });
-</script>
+});
+});
+	</script>
 {% endblock %}

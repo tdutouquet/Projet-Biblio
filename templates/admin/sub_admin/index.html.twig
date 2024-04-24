@@ -34,7 +34,7 @@
 						<td class="align-middle">{{ sub.startDate|date('d-m-Y') }}</td>
 						<td class="align-middle">{{ sub.endDate|date('d-m-Y') }}</td>
 						<td class="align-middle">
-							<a href="{{ path('app_sub_admin_delete', {'id': sub.id}) }}" class="btn btn-danger delete-btn" data-id="{{ sub.id }}">Résilier</a>
+							<a href="{{ path('app_sub_admin_delete', {'id': sub.id}) }}" class="btn btn-danger btn-sm delete-btn" data-id="{{ sub.id }}">Résilier</a>
 						</td>
 					</tr>
 				{% endfor %}
