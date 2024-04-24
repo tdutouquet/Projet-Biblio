@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Salles;
 use App\Form\SallesType;
@@ -17,7 +17,7 @@ class SallesAdminController extends AbstractController
     #[Route('/', name: 'app_salles_admin_index', methods: ['GET'])]
     public function index(SallesRepository $sallesRepository): Response
     {
-        return $this->render('salles_admin/index.html.twig', [
+        return $this->render('admin/salles_admin/index.html.twig', [
             'salles' => $sallesRepository->findAll(),
         ]);
     }
@@ -36,7 +36,7 @@ class SallesAdminController extends AbstractController
             return $this->redirectToRoute('app_salles_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('salles_admin/new.html.twig', [
+        return $this->render('admin/salles_admin/new.html.twig', [
             'salle' => $salle,
             'form' => $form,
         ]);
@@ -45,7 +45,7 @@ class SallesAdminController extends AbstractController
     #[Route('/{id}', name: 'app_salles_admin_show', methods: ['GET'])]
     public function show(Salles $salle): Response
     {
-        return $this->render('salles_admin/show.html.twig', [
+        return $this->render('admin/salles_admin/show.html.twig', [
             'salle' => $salle,
         ]);
     }
@@ -62,7 +62,7 @@ class SallesAdminController extends AbstractController
             return $this->redirectToRoute('app_salles_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('salles_admin/edit.html.twig', [
+        return $this->render('admin/salles_admin/edit.html.twig', [
             'salle' => $salle,
             'form' => $form,
         ]);
@@ -76,6 +76,6 @@ class SallesAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_salles_admin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin/app_salles_admin_index', [], Response::HTTP_SEE_OTHER);
     }
 }

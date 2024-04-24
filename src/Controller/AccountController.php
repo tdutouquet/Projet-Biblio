@@ -45,10 +45,8 @@ class AccountController extends AbstractController
     }
 
     #[Route('/compte/modifier', name: 'app_account_edit')]
-    public function edit(Request $request, EntityManagerInterface $em): Response
+    public function edit(UserInterface $user, Request $request, EntityManagerInterface $em): Response
     {
-        $user = $this->getUser();
-
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }

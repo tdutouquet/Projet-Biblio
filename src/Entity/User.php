@@ -81,6 +81,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, Rental>
+     */
+    #[ORM\OneToMany(targetEntity: Rental::class, mappedBy: 'user')]
+    private Collection $rentals;
+
     public function __construct()
     {
         $this->is_banned = false;
@@ -88,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->emprunts = new ArrayCollection();
         $this->subscription = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->rentals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -356,6 +363,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rental>
+     */
+    public function getRentals(): Collection
+    {
+        return $this->rentals;
+    }
+
+    public function addRental(Rental $rental): static
+    {
+        if (!$this->rentals->contains($rental)) {
+            $this->rentals->add($rental);
+            $rental->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRental(Rental $rental): static
+    {
+        if ($this->rentals->removeElement($rental)) {
+            // set the owning side to null (unless already changed)
+            if ($rental->getUser() === $this) {
+                $rental->setUser(null);
             }
         }
 
