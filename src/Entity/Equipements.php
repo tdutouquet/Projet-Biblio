@@ -16,13 +16,13 @@ class Equipements
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?string $nom = null; // Ajout du champ pour stocker le nom de l'équipement
+    private ?string $nom = null;
 
     /**
      * @var Collection<int, Salles>
      */
-    #[ORM\ManyToMany(targetEntity: Salles::class, inversedBy: 'equipements')]
-    private Collection $salles;
+    #[ORM\ManyToMany(targetEntity: Salles::class, mappedBy: 'equipement')]
+    private Collection $salles; // Ajout du champ pour stocker le nom de l'équipement
 
     public function __construct()
     {
@@ -58,6 +58,7 @@ class Equipements
     {
         if (!$this->salles->contains($salle)) {
             $this->salles->add($salle);
+            $salle->addEquipement($this);
         }
 
         return $this;
@@ -65,7 +66,9 @@ class Equipements
 
     public function removeSalle(Salles $salle): static
     {
-        $this->salles->removeElement($salle);
+        if ($this->salles->removeElement($salle)) {
+            $salle->removeEquipement($this);
+        }
 
         return $this;
     }

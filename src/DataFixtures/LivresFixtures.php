@@ -2,13 +2,14 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use App\Entity\Livres;
 use App\Entity\Etat;
+use App\Entity\Livres;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class LivresFixtures extends Fixture
+class LivresFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -36,9 +37,13 @@ class LivresFixtures extends Fixture
             $manager->persist($livre);
         }
 
-        // $product = new Product();
-        // $manager->persist($product);
-
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            EtatsFixtures::class,
+        ];
     }
 }

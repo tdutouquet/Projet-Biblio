@@ -29,14 +29,14 @@ class UserAdminController extends AbstractController
     public function details(User $user, Request $request, EntityManagerInterface $em, UserRepository $userRepository, int $id): Response
     {
         // Display the user
-        $userDisplay = $userRepository->find($id);
+        $userDisplay = $user;
 
         // Handle the form
         $userForm = $this->createForm(UserFormType::class, $user);
+        $userForm->handleRequest($request);        
 
-        $userForm->handleRequest($request);
-    
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            dd($userForm->GetData());
             $em->persist($user);
             $em->flush();
 

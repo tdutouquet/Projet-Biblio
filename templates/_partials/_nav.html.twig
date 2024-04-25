@@ -12,23 +12,6 @@
 				<li class="nav-item">
 					<a class="nav-link" href="{{path("app_salles")}}">Salles d'étude</a>
 				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Dropdown
-					</a>
-					<ul class="dropdown-menu">
-						<li>
-							<a class="dropdown-item" href="#">Action</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="#">Another action</a>
-						</li>
-						<li><hr class="dropdown-divider"></li>
-						<li>
-							<a class="dropdown-item" href="#">Something else here</a>
-						</li>
-					</ul>
-				</li>
 			</ul>
 			<div class="d-flex">
 				{% if app.user %}
@@ -51,19 +34,17 @@
 						<button type="button" class="btn btn-light">Inscription</button>
 					</a>
 				{% endif %}
+				<form action="{{ path('changer_langue') }}" method="get" class="mx-2">
+					<select
+						name="_locale" onchange="this.form.submit()" class="form-select">
+						<!-- Ajout ici d'autres langues -->
+						<option value="fr" {% if app.request.locale == 'fr' %} selected {% endif %}>Français</option>
+						<option value="en" {% if app.request.locale == 'en' %} selected {% endif %}>English</option>
+						<option value="es" {% if app.request.locale == 'es' %} selected {% endif %}>Spanish</option>
+					</select>
+				</form>
 			</div>
 		</div>
 	</div>
-
-<div>
-<form action="{{ path('changer_langue') }}" method="get">
-    <select name="_locale" onchange="this.form.submit()">
-	        <!-- Ajout ici d'autres langues -->
-        <option value="fr" {% if app.request.locale == 'fr' %}selected{% endif %}>Français</option>
-        <option value="en" {% if app.request.locale == 'en' %}selected{% endif %}>English</option>
-		<option value="es" {% if app.request.locale == 'es' %}selected{% endif %}>Spanish</option>
-
-    </select>
-</form>
-</div>
+	<div></div>
 </nav>

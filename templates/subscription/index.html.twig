@@ -20,7 +20,11 @@
 					/ an
 				</p>
 				{% if app.user %}
-					<a href="{{ path('app_subscription_process', {'type': 'yearly'}) }}" class="btn btn-primary">Souscrire</a>
+					{% if flag %}
+						Vous êtes déjà abonné. Merci de votre fidélité ;)
+					{% else %}
+					<a href="{{ path('app_subscription_stripe', {'type': 'yearly'}) }}" class="btn btn-primary sub-btn" data-id="yearly">Souscrire</a>
+					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
 					ou
@@ -42,7 +46,11 @@
 					/ mois
 				</p>
 				{% if app.user %}
-					<a href="{{ path('app_subscription_process', {'type': 'monthly'}) }}" class="btn btn-primary">Souscrire</a>
+					{% if flag %}
+					Vous êtes déjà abonné. Merci de votre fidélité ;)
+					{% else %}
+					<a href="{{ path('app_subscription_stripe', {'type': 'monthly'}) }}" class="btn btn-primary sub-btn" data-id="monthly">Souscrire</a>
+					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
 					ou

@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Emprunt;
 use App\Form\AccountFormType;
+use App\Repository\CommentRepository;
 use App\Repository\EmpruntRepository;
+use App\Repository\RentalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SubscriptionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,31 +18,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository): Response
+    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo, RentalRepository $rentalRepo): Response
     {
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }
-
+        
         $sub = $subRepo->findOneBy(['user' => $user]);
-        // $emp = $empRepo->findBy(['user' => $user]);
+        
+        $historiqueEmprunts = $empruntRepository->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
+       
+        $comments = $comRepo->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
-        // $emprunts = $empRepo->findEmpruntsWithDetailsByUser($user);
+        $rentals = $rentalRepo->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
         return $this->render('account/index.html.twig', [
             'controller_name' => 'AccountController',
             'user' => $user,
-            'historiqueEmprunts' => $historiqueEmprunts
+            'historiqueEmprunts' => $historiqueEmprunts,
             'subscription' => $sub,
-            // 'emprunts' => $emprunts,
+            'comments' => $comments,
+            'rentals' => $rentals
         ]);
     }
 
     #[Route('/compte/modifier', name: 'app_account_edit')]
-    public function edit(Request $request, EntityManagerInterface $em): Response
+    public function edit(UserInterface $user, Request $request, EntityManagerInterface $em): Response
     {
-        $user = $this->getUser();
-
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non connecté');
         }
