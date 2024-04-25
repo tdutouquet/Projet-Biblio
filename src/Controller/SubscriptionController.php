@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
 use App\Entity\Subscription;
 use App\Entity\SubscriptionType;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SubscriptionTypeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SubscriptionController extends AbstractController
 {
@@ -34,6 +39,46 @@ class SubscriptionController extends AbstractController
             'controller_name' => 'SubscriptionController',
             'flag' => $flag,
         ]);
+    }
+
+    #[Route('/abonnement/create-session-stripe/{type}', name: 'app_subscription_stripe')]
+    public function stripe(string $type, SubscriptionTypeRepository $subTypeRepo, UserInterface $user, UrlGeneratorInterface $generator): RedirectResponse
+    {
+        $stripeSecretKey = 'sk_test_51P9PqKAVQGNtqCU6Kl5XUQef2605uvHe53XR1nQjdxnuwq85DxwvF98Yqr6lJwyQVNvlDAYwl0HhvEyAssnvQE3c00XWduvjaI';
+        Stripe::setApiKey($stripeSecretKey);
+
+        $order = [];
+        $subTypes = $subTypeRepo->findAll();
+
+        if ($type == 'monthly') {
+            $order['name'] = 'Abonnement mensuel';
+            $order['price'] = $subTypes[0]->getPrice();
+        }
+
+        if ($type == 'yearly') {
+            $order['name'] = 'Abonnement annuel';
+            $order['price'] = $subTypes[1]->getPrice();
+        }
+
+        $checkout_session = \Stripe\Checkout\Session::create([
+            'customer_email' => $user->getEmail(),
+            'line_items' => [[
+                'quantity' => 1,
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $order['price']*100,
+                    'product_data' => [
+                        'name' => $order['name'],
+                    ],
+                ]
+            ]],
+            'payment_method_types' => ['card'],
+            'mode' => 'payment',
+            'success_url' => $generator->generate('app_subscription_process', ['type' => $type], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $generator->generate('app_subscription', [], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]);
+
+        return $this->redirect($checkout_session->url);
     }
 
     #[Route('/abonnement/process/{type}', name: 'app_subscription_process')]

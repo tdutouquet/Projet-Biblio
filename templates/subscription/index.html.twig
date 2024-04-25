@@ -23,7 +23,7 @@
 					{% if flag %}
 						Vous êtes déjà abonné. Merci de votre fidélité ;)
 					{% else %}
-					<a href="{{ path('app_subscription_process', {'type': 'yearly'}) }}" class="btn btn-primary sub-btn" data-id="yearly">Souscrire</a>
+					<a href="{{ path('app_subscription_stripe', {'type': 'yearly'}) }}" class="btn btn-primary sub-btn" data-id="yearly">Souscrire</a>
 					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
@@ -49,7 +49,7 @@
 					{% if flag %}
 					Vous êtes déjà abonné. Merci de votre fidélité ;)
 					{% else %}
-					<a href="{{ path('app_subscription_process', {'type': 'monthly'}) }}" class="btn btn-primary sub-btn" data-id="monthly">Souscrire</a>
+					<a href="{{ path('app_subscription_stripe', {'type': 'monthly'}) }}" class="btn btn-primary sub-btn" data-id="monthly">Souscrire</a>
 					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
@@ -59,26 +59,4 @@
 			</div>
 		</div>
 	</main>
-{% endblock %}
-
-{% block script %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.sub-btn');
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            const id = button.getAttribute('data-id');
-            
-            const isConfirmed = confirm("Confirmer l'abonnement ?");
-            
-            if (isConfirmed) {
-                window.location.href = button.getAttribute('href');
-            }
-        });
-    });
-});
-</script>
 {% endblock %}
