@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Subscription;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SubscriptionRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,13 +14,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SubAdminController extends AbstractController
 {
     #[Route('/admin/abonnements', name: 'app_sub_admin')]
-    public function index(SubscriptionRepository $subRepo): Response
+    public function index(SubscriptionRepository $subRepo, PaginatorInterface $paginator, Request $request): Response
     {
         $subs = $subRepo->findAll();
 
+        $pagination = $paginator->paginate(
+            $subs,
+            $request->query->getInt('page', 1),
+            15
+        );
+
         return $this->render('admin/sub_admin/index.html.twig', [
             'controller_name' => 'SubAdminController',
-            'subs' => $subs
+            'subs' => $subs,
+            'pagination' => $pagination
         ]);
     }
 

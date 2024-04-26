@@ -23,7 +23,9 @@ symfony console d:f:l
 ```
 ## Accès administrateur
 
-Une fois les fixtures chargées, un utilisateur administrateur est créé avec le login `admin@localhost.fr` et le mot de passe `admin`.
+Une fois les fixtures chargées, un utilisateur administrateur est créé avec 
+* Login : `admin@localhost.fr`
+* Mot de passe `admin`
 
 ## Paiement test via Stripe
 
