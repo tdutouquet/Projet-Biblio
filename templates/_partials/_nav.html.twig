@@ -54,16 +54,16 @@
 			</div>
 		</div>
 	</div>
-{# test #}
-<div>
-<form action="{{ path('changer_langue') }}" method="get">
-    <select name="_locale" onchange="this.form.submit()">
-	        <!-- Ajout ici d'autres langues -->
-        <option value="fr" {% if app.request.locale == 'fr' %}selected{% endif %}>Français</option>
-        <option value="en" {% if app.request.locale == 'en' %}selected{% endif %}>English</option>
-		<option value="es" {% if app.request.locale == 'es' %}selected{% endif %}>Spanish</option>
+	<div>
+		<ul class="navbar-nav ml-auto">
+			{% for locale in locales %}
+			{% if locale != app.request.locale %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{ path('changer_langue', {'locale': locale })}}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></span></a>
+			</li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
 
-    </select>
-</form>
-</div>
 </nav>

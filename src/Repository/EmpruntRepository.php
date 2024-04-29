@@ -37,6 +37,18 @@ class EmpruntRepository extends ServiceEntityRepository
     return $empruntEnCours;
 }
 
+public function findEmpruntsWithDetailsByUser($userId)
+{
+    return $this->createQueryBuilder('e')
+        ->select('e, livres, user')
+        ->leftJoin('e.livres', 'livres')
+        ->leftJoin('e.user', 'user')
+        ->andWhere('user.id = :userId')
+        ->setParameter('userId', $userId)
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return Emprunt[] Returns an array of Emprunt objects
 //     */

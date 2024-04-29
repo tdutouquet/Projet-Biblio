@@ -11,6 +11,11 @@
 			<div class="alert alert-primary" role="alert">
 				Vous pouvez ajouter un utilisateur manuellement, ou utiliser les fixtures de Symfony pour en ajouter 1 admin et 10 utilisateurs aléatoires.
 			</div>
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success" role="alert">
+					{{ message }}
+				</div>
+			{% endfor %}
 			<a href="{{ path('app_user_admin_add') }}" class="btn btn-primary mb-4">Ajouter un utilisateur</a>
 		</div>
 		<table class="table table-striped table-hover w-75 mx-auto">

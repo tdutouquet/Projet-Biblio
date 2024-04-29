@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LivresController extends AbstractController
 {
@@ -23,7 +24,7 @@ class LivresController extends AbstractController
     // }
 
     #[Route('/livres', name: 'app_livres')]
-    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository): Response
+    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository, TranslatorInterface $translator): Response
     {
 
         $livres = $livresRepository->findAll();
@@ -39,7 +40,7 @@ class LivresController extends AbstractController
     }
 
     #[Route('/livres/{id}/reserve', name: 'app_livre_reserve')]
-    public function reserveLivres(Request $request, Livres $livre, EntityManagerInterface $entityManager, LivresRepository $livresRepository): Response
+    public function reserveLivres(Request $request, Livres $livre, EntityManagerInterface $entityManager, LivresRepository $livresRepository, TranslatorInterface $translator): Response
     {
         // vérif si user est connecté
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -52,7 +53,8 @@ class LivresController extends AbstractController
 
         // vérif si livre existe
         if(!$livre){
-            throw $this->createNotFoundException('Le livre n\'existe pas !');
+            $message = $translator->trans('Le livre n\'existe pas !');
+            throw $this->createNotFoundException($message);
         }
 
         // vérif si livre est disponible
@@ -87,6 +89,25 @@ class LivresController extends AbstractController
             // Redirection vers page d'accueil + msg d'erreur
             return $this->redirectToRoute('app_livres', [], Response::HTTP_SEE_OTHER);
         }
+
+    }
+
+    #[Route('/livres/details/{id}', name: 'app_livres_details')]
+    public function details(Livres $livre, TranslatorInterface $translator): Response
+    {
+        return $this->render('livres/details.html.twig', [
+            'livre' => $livre,
+        ]);
+    }
+
+    #[Route('/admin/livres/non-restitues', name: 'app_livres_nonrestitue')]
+    public function livresNonRestitue(TranslatorInterface $translator): Response
+    {
+        $livresNonRestitues = $this->getDoctrine()->getRepository(Livres::class)->findLivresNonRestitues();
+
+        return $this->render('admin_livres/nonrestitues.html.twig', [
+            'livres' => $livresNonRestitues,
+        ]);
     }
 
 }

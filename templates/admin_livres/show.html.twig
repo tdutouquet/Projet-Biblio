@@ -1,9 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livres{% endblock %}
+{% block title %}Détails livre{% endblock %}
+
+
+{% block stylesheets %}
+{# 
+    <style>
+
+        .table-container {
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        h1{
+            text-align: center;
+            margin-top: -10rem;
+        }
+
+
+        .table {
+            margin-top: -25rem;
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: -20rem;
+            gap: 2rem;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn:active {
+            background-color: #0056b3;
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        }
+    </style> #}
+
+{% endblock %}
+
 
 {% block body %}
-    <h1>Livres</h1>
+
+    <div class="table-container">
+
+    <h1>Détails du livre : {{ livre.titre }}</h1>
 
     <table class="table">
         <tbody>
@@ -47,12 +116,49 @@
                 <th>Note</th>
                 <td>{{ livre.note }}</td>
             </tr>
+            <tr>
+    <th>Historique des emprunts</th>
+    <td>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Emprunté par</th>
+                    <th>Commentaire</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emprunt in livre.emprunts %}
+                    <tr>
+                        <td>{{ emprunt.dateDebut|date('Y-m-d') }}</td>
+                        <td>{{ emprunt.dateFin|date('Y-m-d') }}</td>
+                        <td>{{ emprunt.user.firstname }} {{ emprunt.user.lastname }}</td>
+                        <td>
+                            {# {% if emprunt.commentaire is not empty %} #}
+                                {# {{ emprunt.commentaire }} #}
+                            {# {% else %} #}
+                                Aucun commentaire
+                            {# {% endif %} #}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucun emprunt trouvé pour ce livre.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </td>
+</tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_livres_index') }}">back to list</a>
+    </div>
 
-    <a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}">edit</a>
+    <a href="{{ path('app_admin_livres_index') }}" class="btn">Retour à la liste</a>
+
+    <a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}" class="btn">Modifier</a>
 
     {{ include('admin_livres/_delete_form.html.twig') }}
 {% endblock %}

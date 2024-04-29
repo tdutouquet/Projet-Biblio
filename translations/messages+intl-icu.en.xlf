@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id=".UIuaSp" resname="Utilisateur non connecté">
+        <source>Utilisateur non connecté</source>
+        <target>User not logged in</target>
+      </trans-unit>
+      <trans-unit id="CE__5b0" resname="Votre compte a bien été modifié">
+        <source>Votre compte a bien été modifié</source>
+        <target>Your account has been modified</target>
+      </trans-unit>
+      <trans-unit id="SDWdlsU" resname="Emprunt non trouvé.">
+        <source>Emprunt non trouvé.</source>
+        <target>Loan not found.</target>
+      </trans-unit>
+      <trans-unit id="hdSA4Nd" resname="Une extension a déjà été demandée pour ce livre ? cet emprunt ?">
+        <source>Une extension a déjà été demandée pour ce livre ? cet emprunt ?</source>
+        <target>Has an extension already been requested for this book? this loan?</target>
+      </trans-unit>
+      <trans-unit id="veK8mQy" resname="Extension impossible pour ce livre.">
+        <source>Extension impossible pour ce livre.</source>
+        <target>Extension impossible for this book.</target>
+      </trans-unit>
+      <trans-unit id="TxAN1b." resname="Extension effectuee avec succès.">
+        <source>Extension effectuee avec succès.</source>
+        <target>Extension completed successfully.</target>
+      </trans-unit>
+      <trans-unit id="oiTpjKe" resname="Le livre n'existe pas !">
+        <source>Le livre n'existe pas !</source>
+        <target>The book does not exist!</target>
+      </trans-unit>
+      <trans-unit id="BS2vlpn" resname="Cette méthode peut être vide - elle sera interceptée par la clé de déconnexion de votre pare-feu.">
+        <source>Cette méthode peut être vide - elle sera interceptée par la clé de déconnexion de votre pare-feu.</source>
+        <target>This method can be empty - it will be intercepted by your firewall's logout key.</target>
+      </trans-unit>
+      <trans-unit id="Fni9lCh" resname="Votre abonnement a bien été mis à jour">
+        <source>Votre abonnement a bien été mis à jour</source>
+        <target>Your subscription has been successfully updated</target>
+      </trans-unit>
+      <trans-unit id="YSHyAf3" resname="Bienvenue">
+        <source>Bienvenue</source>
+        <target>Welcome</target>
+      </trans-unit>
+      <trans-unit id="ObNF_G1" resname="Un simple abonnement pour toute la connaissance !">
+        <source>Un simple abonnement pour toute la connaissance !</source>
+        <target>A simple subscription for all the knowledge!</target>
+      </trans-unit>
+      <trans-unit id="2G_p49v" resname="Je m'abonne">
+        <source>Je m'abonne</source>
+        <target>I subscribe</target>
+      </trans-unit>
+      <trans-unit id="zOKvKHZ" resname="Je m'inscris">
+        <source>Je m'inscris</source>
+        <target>I'm registering</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

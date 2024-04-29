@@ -3,19 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Subscription;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SubscriptionController extends AbstractController
 {
     #[Route('/abonnement', name: 'app_subscription')]
-    public function index(): Response
+    public function index(TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
 
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
 
         return $this->render('subscription/index.html.twig', [
@@ -24,11 +27,12 @@ class SubscriptionController extends AbstractController
     }
 
     #[Route('/abonnement/process/{type}', name: 'app_subscription_process')]
-    public function process(string $type): Response
+    public function process(string $type, EntityManagerInterface $manager, TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
 
         if ($type == 'monthly') {
@@ -36,8 +40,10 @@ class SubscriptionController extends AbstractController
             $yearlySubscription->setEndDate(new \DateTime('+1 year'));
             // $yearlySubscription->setSubscriptionType(1);
             $yearlySubscription->setUser($user);
+            $manager->persist($yearlySubscription);
 
-            $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
+            $message = $translator->trans('Votre abonnement a bien été mis à jour');
+            $this->addFlash('success', $message);
         }
 
         if ($type == 'yearly') {
@@ -45,10 +51,14 @@ class SubscriptionController extends AbstractController
             $yearlySubscription->setEndDate(new \DateTime('+1 year'));
             // $yearlySubscription->setSubscriptionType(2);
             $yearlySubscription->setUser($user);
+            $manager->persist($yearlySubscription);
 
-            $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
+            $message = $translator->trans('Votre abonnement a bien été mis à jour');
+            $this->addFlash('success', $message);
         }
 
-        return $this->redirectToRoute('app_main');
+        $manager->flush();
+
+        return $this->redirectToRoute('app_account');
     }
 }
