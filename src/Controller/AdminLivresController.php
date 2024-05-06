@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/admin/livres')]
 class AdminLivresController extends AbstractController
 {
     #[Route('/', name: 'app_admin_livres_index', methods: ['GET'])]
-    public function index(LivresRepository $livresRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(LivresRepository $livresRepository, PaginatorInterface $paginator, Request $request, TranslatorInterface $translator): Response
     {
         $livres = $livresRepository->findAll();
 
@@ -33,7 +34,7 @@ class AdminLivresController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_livres_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
     {
         $livre = new Livres();
         $form = $this->createForm(LivresType::class, $livre);
@@ -53,7 +54,7 @@ class AdminLivresController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_admin_livres_show', methods: ['GET'])]
-    public function show(Livres $livre): Response
+    public function show(Livres $livre, TranslatorInterface $translator): Response
     {
         return $this->render('admin_livres/show.html.twig', [
             'livre' => $livre,
@@ -61,7 +62,7 @@ class AdminLivresController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_livres_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Livres $livre, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Livres $livre, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(LivresType::class, $livre);
         $form->handleRequest($request);
@@ -79,7 +80,7 @@ class AdminLivresController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_admin_livres_delete', methods: ['POST'])]
-    public function delete(Request $request, Livres $livre, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Livres $livre, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$livre->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($livre);

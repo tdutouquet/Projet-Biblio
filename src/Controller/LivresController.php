@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LivresController extends AbstractController
 {
     #[Route('/livres', name: 'app_livres')]
-    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository, SubscriptionRepository $subRepo): Response
+    public function livresListe(LivresRepository $livresRepository, EmpruntRepository $empruntRepository, SubscriptionRepository $subRepo, TranslatorInterface $translator): Response
     {
 
         $livres = $livresRepository->findAll();
@@ -44,7 +45,7 @@ class LivresController extends AbstractController
     }
 
     #[Route('/livres/{id}/reserve', name: 'app_livre_reserve')]
-    public function reserveLivres(Request $request, Livres $livre, EntityManagerInterface $entityManager, LivresRepository $livresRepository): Response
+    public function reserveLivres(Request $request, Livres $livre, EntityManagerInterface $entityManager, LivresRepository $livresRepository, TranslatorInterface $translator): Response
     {
         // vérif si user est connecté
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -57,7 +58,8 @@ class LivresController extends AbstractController
 
         // vérif si livre existe
         if(!$livre){
-            throw $this->createNotFoundException('Le livre n\'existe pas !');
+            $message = $translator->trans('Le livre n\'existe pas !');
+            throw $this->createNotFoundException($message);
         }
 
         // vérif si livre est disponible
@@ -99,7 +101,7 @@ class LivresController extends AbstractController
     }
 
     #[Route('/livres/details/{id}', name: 'app_livres_details')]
-    public function details(Livres $livre, Request $request, EntityManagerInterface $em): Response
+    public function details(Livres $livre, Request $request, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
 
@@ -133,7 +135,7 @@ class LivresController extends AbstractController
     }
 
     #[Route('/admin/livres/non-restitues', name: 'app_livres_nonrestitue')]
-    public function livresNonRestitue(): Response
+    public function livresNonRestitue(TranslatorInterface $translator): Response
     {
         // $livresNonRestitues = $this->getDoctrine()->getRepository(Livres::class)->findLivresNonRestitues();
 

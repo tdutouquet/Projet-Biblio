@@ -13,18 +13,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SubscriptionController extends AbstractController
 {
     #[Route('/abonnement', name: 'app_subscription')]
-    public function index(EntityManagerInterface $manager): Response
+    public function index(EntityManagerInterface $manager, TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
         $subs = $manager->getRepository(Subscription::class)->findBy(['user' => $user]);
         $flag = false;
 
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
 
         foreach ($subs as $sub) {
@@ -82,13 +84,14 @@ class SubscriptionController extends AbstractController
     }
 
     #[Route('/abonnement/process/{type}', name: 'app_subscription_process')]
-    public function process(string $type, EntityManagerInterface $manager): Response
+    public function process(string $type, EntityManagerInterface $manager, TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
         $subTypes = $manager->getRepository(SubscriptionType::class)->findAll();
 
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
 
         if ($type == 'monthly') {
@@ -98,7 +101,8 @@ class SubscriptionController extends AbstractController
             $monthlySubscription->setUser($user);
             $manager->persist($monthlySubscription);
 
-            $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
+            $message = $translator->trans('Votre abonnement a bien été mis à jour');
+            $this->addFlash('success', $message);
         }
 
         if ($type == 'yearly') {
@@ -108,7 +112,8 @@ class SubscriptionController extends AbstractController
             $yearlySubscription->setUser($user);
             $manager->persist($yearlySubscription);
 
-            $this->addFlash('success', 'Votre abonnement a bien été mis à jour');
+            $message = $translator->trans('Votre abonnement a bien été mis à jour');
+            $this->addFlash('success', $message);
         }
 
         $manager->flush();

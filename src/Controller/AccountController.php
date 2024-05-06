@@ -14,14 +14,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
-    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo, RentalRepository $rentalRepo): Response
+    public function index(UserInterface $user, SubscriptionRepository $subRepo, EmpruntRepository $empruntRepository, CommentRepository $comRepo, RentalRepository $rentalRepo, TranslatorInterface $translator): Response
     {
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
         
         $sub = $subRepo->findOneBy(['user' => $user]);
@@ -52,10 +54,11 @@ class AccountController extends AbstractController
     }
 
     #[Route('/compte/modifier', name: 'app_account_edit')]
-    public function edit(UserInterface $user, Request $request, EntityManagerInterface $em): Response
+    public function edit(UserInterface $user, Request $request, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
         if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non connecté');
+            $message = $translator->trans('Utilisateur non connecté');
+            throw $this->createNotFoundException($message);
         }
 
         $accountForm = $this->createForm(AccountFormType::class, $user);
@@ -64,7 +67,9 @@ class AccountController extends AbstractController
         if ($accountForm->isSubmitted() && $accountForm->isValid()) {
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Votre compte a bien été modifié');
+
+            $message = $translator->trans('Votre compte a bien été modifié');
+            $this->addFlash('success', $message );
             return $this->redirectToRoute('app_account');
         }
 
@@ -76,22 +81,25 @@ class AccountController extends AbstractController
     }
 
     #[Route('/compte/extension/{id}', name: 'app_account_extension')]
-    public function extension(int $id, EntityManagerInterface $entityManager): Response
+    public function extension(int $id, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
     {
         $emprunt = $entityManager->getRepository(Emprunt::class)->find($id);
 
         // vérif si emprunt existe
         if (!$emprunt) {
-            throw $this->createNotFoundException('Emprunt non trouvé.');
+            $message = $translator->trans('Emprunt non trouvé.');
+            throw $this->createNotFoundException($message);
         }
 
         // vérif si user peut demander une extension
         if($emprunt->isExtension()) {
             // si extension a déjà été demandée
-            $this->addFlash('warning', 'Une extension a déjà été demandée pour ce livre ? cet emprunt ?');
-        } elseif (!$emprunt->isEligiblePourExtension()) {
+            $message = $translator->trans('Une extension a déjà été demandée pour ce livre ? cet emprunt ?');
+            $this->addFlash('warning', );
+        } elseif (!$emprunt->isEligiblePourExtension($message)) {
             // si extension n'est pas possible
-            $this->addFlash('warning', 'Extension impossible pour ce livre.');
+            $message = $translator->trans('Extension impossible pour ce livre.');
+            $this->addFlash('warning', $message);
         } else {
             // si user peut faire l'extension
             $emprunt->setExtension(true);
@@ -99,8 +107,8 @@ class AccountController extends AbstractController
             $emprunt->setDateFin($newDateFin);
 
             $entityManager->flush();
-
-            $this->addFlash('success', 'Extension effectuee avec succès.');
+            $message = $translator->trans('Extension effectuee avec succès.');
+            $this->addFlash('success', $message);
         }
     }
 
