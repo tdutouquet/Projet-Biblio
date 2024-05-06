@@ -2,13 +2,25 @@
 
 ## Setup
 
+### Base de données
+
+La base de données du projet est, par défaut, `projet_biblio`. Vous pouvez modifier, si besoin, les informations relatives (notamment les accès) à la BDD dans le fichier `.env` à la ligne 28.
+
+Pour créer la base de donnée depuis le projet Symfony :
+
+```
+symfony console doctrine:database:create
+```
+
+### Fixtures
+
 Le projet MyBiblio contient des fixtures, qui permettent de kickstart la base de données, pour plusieurs entités :
-* Utilisateurs ;
-* Livres (et états);
-* Salles (et leurs équipements) :
-* Abonnements (et types d'abonnements) ;
-* Locations de salles ;
-* Commentaires.
+* Utilisateurs
+* Livres (et états)
+* Salles (et leurs équipements)
+* Abonnements (et types d'abonnements)
+* Locations de salles
+* Commentaires
 
 Pour charger les fixtures dans la base de données :
 
@@ -16,10 +28,10 @@ Pour charger les fixtures dans la base de données :
 symfony console make:migration
 ```
 ```
-symfony console d:m:m
+symfony console doctrine:migration:migrate
 ```
 ```
-symfony console d:f:l
+symfony console doctrine:fixtures:load
 ```
 ## Accès administrateur
 
