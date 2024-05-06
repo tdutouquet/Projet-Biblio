@@ -34,17 +34,18 @@
 						<button type="button" class="btn btn-light">Inscription</button>
 					</a>
 				{% endif %}
-				<form action="{{ path('changer_langue') }}" method="get" class="mx-2">
-					<select
-						name="_locale" onchange="this.form.submit()" class="form-select">
-						<!-- Ajout ici d'autres langues -->
-						<option value="fr" {% if app.request.locale == 'fr' %} selected {% endif %}>Français</option>
-						<option value="en" {% if app.request.locale == 'en' %} selected {% endif %}>English</option>
-						<option value="es" {% if app.request.locale == 'es' %} selected {% endif %}>Spanish</option>
-					</select>
-				</form>
-			</div>
+				<div>
+					<ul class="navbar-nav ml-auto">
+						{% for locale in locales %}
+							{% if locale != app.request.locale %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('changer_langue', {'locale': locale })}}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></span>
+								</li>
+							</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
 		</div>
 	</div>
-	<div></div>
-</nav>
+</div>
