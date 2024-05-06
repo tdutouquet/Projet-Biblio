@@ -7,7 +7,7 @@
 	<main class="w-75 mx-auto">
 		<h1 class="mb-4">Choisissez votre abonnement</h1>
 		<div class="card mb-3">
-			<div class="ratio ratio-16x9">
+			<div class="ratio ratio-16x9" style="max-height: 450px;">
 				<img src="https://source.unsplash.com/random/?library&1" class="card-img-top object-fit-cover" alt="Library">
 			</div>
 			<div class="card-body">
@@ -20,7 +20,11 @@
 					/ an
 				</p>
 				{% if app.user %}
-					<a href="{{ path('app_subscription_process', {'type': 'yearly'}) }}" class="btn btn-primary">Souscrire</a>
+					{% if flag %}
+						Vous êtes déjà abonné. Merci de votre fidélité ;)
+					{% else %}
+					<a href="{{ path('app_subscription_stripe', {'type': 'yearly'}) }}" class="btn btn-primary sub-btn" data-id="yearly">Souscrire</a>
+					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
 					ou
@@ -29,7 +33,7 @@
 			</div>
 		</div>
 		<div class="card">
-			<div class="ratio ratio-16x9">
+			<div class="ratio ratio-16x9" style="max-height: 450px;">
 				<img src="https://source.unsplash.com/random/?library&2" class="card-img-top object-fit-cover" alt="Library">
 			</div>
 			<div class="card-body">
@@ -42,7 +46,11 @@
 					/ mois
 				</p>
 				{% if app.user %}
-					<a href="{{ path('app_subscription_process', {'type': 'monthly'}) }}" class="btn btn-primary">Souscrire</a>
+					{% if flag %}
+					Vous êtes déjà abonné. Merci de votre fidélité ;)
+					{% else %}
+					<a href="{{ path('app_subscription_stripe', {'type': 'monthly'}) }}" class="btn btn-primary sub-btn" data-id="monthly">Souscrire</a>
+					{% endif %}
 				{% else %}
 					<a href="{{ path('app_register') }}" class="btn btn-primary">M'inscrire</a>
 					ou

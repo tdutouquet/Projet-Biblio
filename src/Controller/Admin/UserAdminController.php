@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,12 +17,20 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserAdminController extends AbstractController
 {
     #[Route('/admin/utilisateurs', name: 'app_user_admin')]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $users = $userRepository->findAll();
+
+        $pagination = $paginator->paginate(
+            $users,
+            $request->query->getInt('page', 1),
+            15
+        );
+
         return $this->render('admin/user_admin/index.html.twig', [
             'controller_name' => 'UserAdminController',
-            'users' => $users
+            'users' => $users,
+            'pagination' => $pagination
         ]);
     }
 
@@ -29,14 +38,14 @@ class UserAdminController extends AbstractController
     public function details(User $user, Request $request, EntityManagerInterface $em, UserRepository $userRepository, int $id): Response
     {
         // Display the user
-        $userDisplay = $userRepository->find($id);
+        $userDisplay = $user;
 
         // Handle the form
         $userForm = $this->createForm(UserFormType::class, $user);
+        $userForm->handleRequest($request);        
 
-        $userForm->handleRequest($request);
-    
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            dd($userForm->GetData());
             $em->persist($user);
             $em->flush();
 

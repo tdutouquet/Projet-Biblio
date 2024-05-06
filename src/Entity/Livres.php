@@ -190,32 +190,32 @@ class Livres
         return $this;
     }
 
-    /**
-     * @return Collection<int, Equipements>
-     */
-    public function getEquipements(): Collection
-    {
-        return $this->equipements;
-    }
+    // /**
+    //  * @return Collection<int, Equipements>
+    //  */
+    // public function getEquipements(): Collection
+    // {
+    //     return $this->equipements;
+    // }
 
-    public function addEquipement(Equipements $equipement): static
-    {
-        if (!$this->equipements->contains($equipement)) {
-            $this->equipements->add($equipement);
-            $equipement->addNom($this);
-        }
+    // public function addEquipement(Equipements $equipement): static
+    // {
+    //     if (!$this->equipements->contains($equipement)) {
+    //         $this->equipements->add($equipement);
+    //         $equipement->addNom($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeEquipement(Equipements $equipement): static
-    {
-        if ($this->equipements->removeElement($equipement)) {
-            $equipement->removeNom($this);
-        }
+    // public function removeEquipement(Equipements $equipement): static
+    // {
+    //     if ($this->equipements->removeElement($equipement)) {
+    //         $equipement->removeNom($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, Emprunt>
