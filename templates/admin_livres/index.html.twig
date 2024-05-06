@@ -1,127 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des livres{% endblock %}
-
-{% block stylesheets %}
-
-    <style>
-
-        .table-container {
-            margin-top: 2rem;
-            display: grid;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        h1{
-            text-align: center;
-        }
-
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: #333;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn:active {
-            background-color: #0056b3;
-            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        }
-    </style>
-
+{% block title %}Liste des livres
 {% endblock %}
 
 {% block body %}
 
-    <div class="table-container">
-    {% include '_partials/_adminnav.html.twig' %}
+	<main class="d-flex flex-column align-items-center">
+		{% include '_partials/_adminnav.html.twig' %}
+		<h1>Liste des livres</h1>
+		<div class="my-5">
+			<a href="{{ path('app_livres_nonrestitue') }}" class="btn">Afficher les livres non restitués</a>
+			<a href="{{ path('app_admin_livres_new') }}" class="btn">Ajouter un livre</a>
+		</div>
+		<table class="table table-striped table-hover w-90 px-5">
+			<thead>
+				<tr>
+					<th>Image</th>
+					<th>Titre</th>
+					<th>Categorie</th>
+					<th>Disponibilite</th>
+					{# <th>Actions</th> #}
+					<th>Emprunté par</th>
+					<th>Début</th>
+					<th>Fin prévue</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for livre in pagination %}
+					<tr>
+						<td class="align-middle">{{ livre.image }}</td>
+						<td class="align-middle">{{ livre.titre }}</td>
+						<td class="align-middle">{{ livre.categorie }}</td>
+						<td class="align-middle">{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
+						<td class="align-middle">
+							{% if livre.emprunts|length > 0 %}
+								{{ livre.emprunts.first().user.firstname }}
+								{{ livre.emprunts.first().user.lastname }}
+							{% else %}
+								Non emprunté.
+							{% endif %}
 
-    <h1>Liste des livres</h1>
-
-    <a href="{{ path('app_livres_nonrestitue') }}" class="btn">Afficher les livres non restitués</a>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Titre</th>
-                <th>Categorie</th>
-                <th>Disponibilite</th>
-                {# <th>Actions</th> #}
-                <th>Emprunté par</th>
-                <th>Début</th>
-                <th>Fin prévue</th>
-                
-
-            </tr>
-        </thead>
-        <tbody>
-        {% for livre in livres %}
-            <tr>
-                <td>{{ livre.image }}</td>
-                <td>{{ livre.titre }}</td>
-                <td>{{ livre.categorie }}</td>
-                <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
-                <td>
-                    {% if livre.emprunts|length > 0 %}
-                        {{ livre.emprunts.first().user.firstname }} {{ livre.emprunts.first().user.lastname }}
-                    {% else %}
-                        Non emprunté.
-                    {% endif %}
-
-                </td>
-                <td>{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateDebut|date('Y-m-d') : 'Non disponible' }}</td>
-                <td>{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateFin|date('Y-m-d') : 'Non disponible' }}</td>
+						</td>
+						<td class="align-middle">{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateDebut|date('Y-m-d') : 'Non disponible' }}</td>
+						<td class="align-middle">{{ livre.emprunts|length > 0 ? livre.emprunts.first().dateFin|date('Y-m-d') : 'Non disponible' }}</td>
 
 
-                <td>
-                    <a href="{{ path('app_admin_livres_show', {'id': livre.id}) }}" class="btn">Show</a>
-                    <a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}" class="btn">Edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="11">No records found.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    </div>
-
-    <a href="{{ path('app_admin_livres_new') }}" class="btn">Create new</a>
-
+						<td class="align-middle">
+							<a href="{{ path('app_admin_livres_show', {'id': livre.id}) }}" class="btn btn-dark btn-sm">Détails</a>
+							<a href="{{ path('app_admin_livres_edit', {'id': livre.id}) }}" class="btn btn-dark btn-sm">Modifier</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="11">No records found.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<nav class="mt-4">
+			{{ knp_pagination_render(pagination) }}
+		</nav>
+	</main>
 
 {% endblock %}

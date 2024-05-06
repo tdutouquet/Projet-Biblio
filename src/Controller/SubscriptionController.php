@@ -95,11 +95,11 @@ class SubscriptionController extends AbstractController
         }
 
         if ($type == 'monthly') {
-            $yearlySubscription = new Subscription();
-            $yearlySubscription->setEndDate(new \DateTime('+1 year'));
-            $yearlySubscription->setSubscriptionType($subTypes[0]);
-            $yearlySubscription->setUser($user);
-            $manager->persist($yearlySubscription);
+            $monthlySubscription = new Subscription();
+            $monthlySubscription->setEndDate(new \DateTime('+1 month'));
+            $monthlySubscription->setSubscriptionType($subTypes[0]);
+            $monthlySubscription->setUser($user);
+            $manager->persist($monthlySubscription);
 
             $message = $translator->trans('Votre abonnement a bien été mis à jour');
             $this->addFlash('success', $message);
